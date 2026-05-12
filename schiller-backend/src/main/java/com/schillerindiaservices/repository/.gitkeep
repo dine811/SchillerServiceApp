@@ -1,0 +1,3 @@
+# repository package
+# Add Spring Data JPA Repository interfaces here
+# Example: ServiceRepository, EmployeeRepository, etc.

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Architecture Diagram - Schiller India Services</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --paper: #ffffff;
+      --text: #1a1d24;
+      --muted: #5c6370;
+      --border: #e2e5eb;
+      --accent: #0f4c81;
+      --accent-soft: #e8f0f8;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    header, section {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1.25rem;
+    }
+    header {
+      padding: 1.75rem;
+      border-left: 4px solid var(--accent);
+    }
+    section { padding: 1.35rem 1.5rem; }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.55rem;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      margin: 0 0 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.08rem;
+      color: var(--accent);
+    }
+    p { margin: 0 0 0.85rem; }
+    ul, ol { margin: 0 0 0.85rem; padding-left: 1.35rem; }
+    li { margin-bottom: 0.35rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.5rem 0 0.25rem;
+      font-size: 0.92rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-weight: 650;
+    }
+    tr:nth-child(even) td { background: #fafbfc; }
+    code, .mono {
+      font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+      font-size: 0.88em;
+      background: #f0f2f6;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+    .meta { color: var(--muted); font-size: 0.92rem; }
+    .diagram {
+      overflow-x: auto;
+      padding: 1rem 0.25rem 0;
+    }
+    .mermaid {
+      min-width: 720px;
+      text-align: center;
+    }
+    .note {
+      border-left: 3px solid var(--accent);
+      background: #f8fafc;
+      padding: 0.75rem 0.85rem;
+      border-radius: 6px;
+      color: var(--muted);
+    }
+    footer {
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-style: italic;
+      margin-top: 1.5rem;
+    }
+    @media print {
+      body { background: #fff; }
+      .wrap { max-width: 100%; padding: 0; }
+      header, section { break-inside: avoid; }
+      .mermaid { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Schiller India Services - New Migrated Codebase Architecture</h1>
+      <div class="meta">
+        <strong>Document type:</strong> High-level architecture diagram<br />
+        <strong>Scope:</strong> Current migrated Next.js + Spring Boot codebase and completed/partially migrated modules<br />
+        <strong>Related docs:</strong> <code>MIGRATION_STATUS.md</code>, <code>ADMIN_LEGACY_MODULES.md</code>, <code>ENGINEER_SERVICE_MODULE_MIGRATION.md</code>, <code>AUTHENTICATION_AUTHORIZATION_IMPLEMENTATION_PLAN.md</code><br />
+        <strong>Last updated:</strong> April 2026
+      </div>
+    </header>
+
+    <section>
+      <h2>1. System context</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart LR
+  Users["Business users&lt;br/&gt;Admin, Engineer, FQC, VP,&lt;br/&gt;Service Coordinator, Repair Team,&lt;br/&gt;Product Support"]
+  Browser["Browser"]
+  Frontend["Next.js Frontend&lt;br/&gt;schiller-frontend&lt;br/&gt;Dashboard UI, routing, role nav"]
+  Backend["Spring Boot Backend&lt;br/&gt;schiller-backend&lt;br/&gt;REST APIs, services, exports"]
+  Database[("PostgreSQL Database&lt;br/&gt;Flyway-managed schema&lt;br/&gt;legacy-aligned tables")]
+  Legacy["Legacy JSP Application&lt;br/&gt;WebContent/*.jsp&lt;br/&gt;reference / pending modules"]
+  Exports["Excel Downloads&lt;br/&gt;Apache POI .xlsx"]
+
+  Users --&gt; Browser
+  Browser --&gt; Frontend
+  Frontend --&gt; Backend
+  Backend --&gt; Database
+  Backend --&gt; Exports
+  Legacy -. migration reference .-&gt; Frontend
+  Legacy -. migration reference .-&gt; Backend
+        </pre>
+      </div>
+      <p>The new application separates the legacy JSP monolith into a Next.js dashboard frontend, a Spring Boot REST API, and a PostgreSQL database managed through Flyway migrations.</p>
+    </section>
+
+    <section>
+      <h2>2. Container / layer view</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart TB
+  subgraph Client["Client Layer"]
+    Browser["User Browser"]
+  end
+
+  subgraph FE["Frontend - schiller-frontend"]
+    NextApp["Next.js App Router&lt;br/&gt;src/app/(dashboard)/dashboard"]
+    RoleRouting["Role routing&lt;br/&gt;src/lib/auth.ts"]
+    Navigation["Role navigation&lt;br/&gt;src/config/navigation.ts"]
+    Pages["Dashboard pages&lt;br/&gt;services, calls, activity,&lt;br/&gt;PRF/OB, BIR, non-salable,&lt;br/&gt;spares, reports"]
+    ApiClient["API client / fetch services"]
+  end
+
+  subgraph BE["Backend - schiller-backend"]
+    Controllers["REST Controllers&lt;br/&gt;/api/*"]
+    Services["Service Layer&lt;br/&gt;business rules, filters, exports"]
+    Repositories["JPA Repositories&lt;br/&gt;queries and specifications"]
+    Security["Spring Security / JWT model&lt;br/&gt;role and data-scope hardening"]
+    Excel["Excel Export Layer&lt;br/&gt;Apache POI"]
+  end
+
+  subgraph DB["Data Layer"]
+    Postgres[("PostgreSQL")]
+    Flyway["Flyway migrations&lt;br/&gt;V10+ service modules,&lt;br/&gt;V12-V17 BIR/non-salable/spares fixes"]
+  end
+
+  Browser --&gt; NextApp
+  NextApp --&gt; RoleRouting
+  NextApp --&gt; Navigation
+  NextApp --&gt; Pages
+  Pages --&gt; ApiClient
+  ApiClient --&gt; Controllers
+  Controllers --&gt; Security
+  Controllers --&gt; Services
+  Services --&gt; Repositories
+  Services --&gt; Excel
+  Repositories --&gt; Postgres
+  Flyway --&gt; Postgres
+        </pre>
+      </div>
+      <p class="note">The architecture target is JWT + role-aware access. Auth hardening remains a P0 item so route permissions, endpoint guards, and data scoping are verified before cutover.</p>
+    </section>
+
+    <section>
+      <h2>3. Role routing and dashboard access</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart LR
+  Login["Login / authenticated session"]
+  Role["Normalized app role"]
+
+  Admin["ADMIN&lt;br/&gt;/dashboard&lt;br/&gt;full dashboard access"]
+  Engineer["ENGINEER&lt;br/&gt;/dashboard/engineer&lt;br/&gt;engineer service/activity view"]
+  FQC["FQC&lt;br/&gt;/dashboard/fqc&lt;br/&gt;activity + non-salable + BIR"]
+  VP["VICE_CHANCELLOR&lt;br/&gt;/dashboard/reports&lt;br/&gt;partial executive access"]
+  Coordinator["SERVICE_COORDINATOR&lt;br/&gt;/dashboard/call-list&lt;br/&gt;partial coordinator access"]
+  Repair["REPAIR_TEAM&lt;br/&gt;/dashboard/under-repair&lt;br/&gt;partial repair access"]
+  PS["PRODUCT_SUPPORT&lt;br/&gt;/dashboard/prf-ob-admin&lt;br/&gt;partial product support access"]
+
+  Login --&gt; Role
+  Role --&gt; Admin
+  Role --&gt; Engineer
+  Role --&gt; FQC
+  Role --&gt; VP
+  Role --&gt; Coordinator
+  Role --&gt; Repair
+  Role --&gt; PS
+        </pre>
+      </div>
+      <p>Legacy <code>index.jsp</code> used <code>logrole</code> and included one role dashboard JSP. The new app normalizes roles and uses frontend route defaults plus dashboard allow-lists.</p>
+    </section>
+
+    <section>
+      <h2>4. Migrated module map</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart TB
+  Dashboard["Next.js Dashboard Shell"]
+
+  subgraph Master["Master Data"]
+    Divisions["Divisions / Products&lt;br/&gt;/dashboard/divisions"]
+    Employees["Employees / Engineers&lt;br/&gt;/dashboard/employees"]
+    Dealers["Dealers&lt;br/&gt;/dashboard/dealers"]
+    Company["Company master&lt;br/&gt;pending / decision needed"]
+  end
+
+  subgraph Service["Service Management"]
+    Services["Services&lt;br/&gt;/dashboard/services&lt;br/&gt;/api/services"]
+    UnderRepair["Under repair&lt;br/&gt;/dashboard/under-repair"]
+    PendingFRN["Pending FRN&lt;br/&gt;/dashboard/pending-frn"]
+    OBPending["OB pending&lt;br/&gt;/dashboard/ob-pending"]
+    SCClosed["SC closed&lt;br/&gt;/dashboard/sc-closed"]
+    ClosedProduct["Closed product&lt;br/&gt;/dashboard/new-closed"]
+    Scrap["Scrap list&lt;br/&gt;/dashboard/scrap-list"]
+    JobSheet["Job sheet&lt;br/&gt;/dashboard/services/[id]/jobsheet"]
+  end
+
+  subgraph Activity["Activity and Calls"]
+    Calls["Call register&lt;br/&gt;/dashboard/call-list"]
+    ClosedCalls["Closed calls&lt;br/&gt;/dashboard/closed-calls"]
+    PendingActivity["Pending activity&lt;br/&gt;/dashboard/pending-activity"]
+    ClosedActivity["Closed activity&lt;br/&gt;/dashboard/closed-activity"]
+  end
+
+  subgraph PRFOB["PRF / OB"]
+    PRFOpen["PRF/OB list&lt;br/&gt;/dashboard/prf-ob-admin"]
+    PRFClosed["Closed PRF/OB&lt;br/&gt;/dashboard/prf-ob-closed"]
+  end
+
+  subgraph Quality["Quality / FQC / BIR"]
+    NonSale["Non-salable list&lt;br/&gt;/dashboard/non-salable-admin&lt;br/&gt;/api/nonsaleable/admin/pending"]
+    Salables["Salables&lt;br/&gt;/dashboard/salables&lt;br/&gt;/api/nonsaleable/salables"]
+    BIR["BIR list&lt;br/&gt;/dashboard/bir-admin&lt;br/&gt;/api/bir/admin/pending"]
+    ClosedBIR["Closed BIR&lt;br/&gt;/dashboard/bir-closed-admin&lt;br/&gt;/api/bir/admin/completed"]
+  end
+
+  subgraph Spares["Spares"]
+    SparesEntry["Spares entry&lt;br/&gt;/dashboard/spares-entry&lt;br/&gt;/api/partnumber-entry"]
+    SparesList["Spares list&lt;br/&gt;/dashboard/spares&lt;br/&gt;engineer/coordinator parity review"]
+    SparesCompleted["Spares completed&lt;br/&gt;/dashboard/spares-completed&lt;br/&gt;engineer/coordinator parity review"]
+  end
+
+  subgraph AdminOps["Reports / Escalations / Settings"]
+    Reports["Reports&lt;br/&gt;/dashboard/reports"]
+    Escalations["Escalations&lt;br/&gt;/dashboard/escalations"]
+    Settings["Settings shell&lt;br/&gt;/dashboard/settings"]
+    MailSettings["Email / dropdown / auto mail config&lt;br/&gt;pending / decision needed"]
+  end
+
+  Dashboard --&gt; Master
+  Dashboard --&gt; Service
+  Dashboard --&gt; Activity
+  Dashboard --&gt; PRFOB
+  Dashboard --&gt; Quality
+  Dashboard --&gt; Spares
+  Dashboard --&gt; AdminOps
+        </pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Typical request flow</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+sequenceDiagram
+  autonumber
+  participant U as User
+  participant FE as Next.js Dashboard
+  participant Auth as Role/Auth Layer
+  participant API as Spring Boot Controller
+  participant SVC as Service Layer
+  participant DB as PostgreSQL
+  participant XLS as Excel Export
+
+  U-&gt;&gt;FE: Open dashboard route
+  FE-&gt;&gt;Auth: Resolve role and allowed path
+  Auth--&gt;&gt;FE: Allow route or redirect
+  FE-&gt;&gt;API: GET /api module endpoint
+  API-&gt;&gt;SVC: Apply business filters
+  SVC-&gt;&gt;DB: Query via JPA repository
+  DB--&gt;&gt;SVC: Return rows
+  SVC--&gt;&gt;API: DTO/page response
+  API--&gt;&gt;FE: JSON response
+  FE--&gt;&gt;U: Render table/cards/actions
+
+  opt Export
+    U-&gt;&gt;FE: Click export
+    FE-&gt;&gt;API: GET export endpoint with filters
+    API-&gt;&gt;SVC: Normalize filters and date range
+    SVC-&gt;&gt;DB: Query export rows
+    SVC-&gt;&gt;XLS: Generate .xlsx
+    XLS--&gt;&gt;FE: Download blob
+    FE--&gt;&gt;U: Save Excel file
+  end
+        </pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>6. Data and migration view</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart LR
+  LegacyDB[("Legacy MySQL / JSP-era tables")]
+  Import["Data import / migration scripts"]
+  Flyway["Flyway migrations&lt;br/&gt;schema corrections and additions"]
+  Postgres[("PostgreSQL new database")]
+
+  subgraph Tables["Key migrated / aligned tables"]
+    ServiceMaster["service_master"]
+    Employee["employee"]
+    PRFOB["prfobmaster"]
+    NonSaleable["nonsaleablemaster"]
+    BIRMaster["birmaster"]
+    PartEntry["partnumber_entry"]
+    SpareMaster["sparepart_master"]
+  end
+
+  LegacyDB --&gt; Import
+  Import --&gt; Postgres
+  Flyway --&gt; Postgres
+  Postgres --&gt; ServiceMaster
+  Postgres --&gt; Employee
+  Postgres --&gt; PRFOB
+  Postgres --&gt; NonSaleable
+  Postgres --&gt; BIRMaster
+  Postgres --&gt; PartEntry
+  Postgres --&gt; SpareMaster
+        </pre>
+      </div>
+      <p>The migrated modules preserve legacy table intent where possible. Some migrations include compatibility corrections for imported tables, including missing IDs, missing columns, and date column type normalization.</p>
+    </section>
+
+    <section>
+      <h2>7. Completed vs pending at architecture level</h2>
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Architecture status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Dashboard shell</td><td>Migrated to Next.js App Router</td></tr>
+          <tr><td>Admin operational lists</td><td>Mostly migrated</td></tr>
+          <tr><td>Engineer service list</td><td>Migrated with role-aware division scope</td></tr>
+          <tr><td>FQC surface</td><td>Migrated at navigation/route level</td></tr>
+          <tr><td>BIR / closed BIR</td><td>Migrated list/export/delete; edit parity decision pending</td></tr>
+          <tr><td>Non-salable / salables</td><td>Migrated list/export/delete; update parity decision pending</td></tr>
+          <tr><td>Spares entry</td><td>Migrated</td></tr>
+          <tr><td>Engineer/coordinator spares list</td><td>Existing routes, but role/auth parity review pending</td></tr>
+          <tr><td>VP / coordinator / repair / product support</td><td>Partial; role parity work pending</td></tr>
+          <tr><td>Company / dropdown / email / auto mail config</td><td>Pending or decision needed</td></tr>
+          <tr><td>Auth hardening</td><td>Architecture target defined; implementation/audit remains P0</td></tr>
+          <tr><td>Cutover readiness</td><td>Pending QA, data validation, and production readiness checks</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>8. Recommended next diagram updates</h2>
+      <ol>
+        <li>A pending legacy role receives a dedicated dashboard hub.</li>
+        <li>A legacy-only admin configuration module is migrated or retired.</li>
+        <li>Auth hardening is completed and backend APIs enforce role/data scope.</li>
+        <li>Repair-team and coordinator-specific flows are finalized.</li>
+        <li>The production cutover plan is approved.</li>
+      </ol>
+      <footer>
+        Markdown source: <code>docs/ARCHITECTURE_DIAGRAM.md</code>. This HTML file uses Mermaid from CDN for browser rendering.
+      </footer>
+    </section>
+  </div>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      securityLevel: "loose",
+      theme: "default",
+      flowchart: { htmlLabels: true, curve: "basis" },
+      sequence: { mirrorActors: false }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Migration Status Report — Schiller India Services</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --paper: #ffffff;
+      --text: #1a1d24;
+      --muted: #5c6370;
+      --border: #e2e5eb;
+      --accent: #0f4c81;
+      --accent-soft: #e8f0f8;
+      --strong: #0d6e4d;
+      --weak: #8b4513;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    header.report-header {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.75rem 1.5rem;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--accent);
+    }
+    header.report-header h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.55rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .meta span { margin-right: 1.25rem; }
+    section {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    section h2 {
+      margin: 0 0 0.85rem;
+      font-size: 1.1rem;
+      font-weight: 650;
+      color: var(--accent);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section h3 {
+      margin: 1.25rem 0 0.6rem;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    p { margin: 0 0 0.85rem; }
+    p:last-child { margin-bottom: 0; }
+    ul, ol { margin: 0 0 0.85rem; padding-left: 1.35rem; }
+    li { margin-bottom: 0.4rem; }
+    strong { font-weight: 600; }
+    code, .mono {
+      font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+      font-size: 0.88em;
+      background: #f0f2f6;
+      padding: 0.12em 0.4em;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 0.5rem 0 0.25rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+      font-weight: 600;
+      color: var(--accent);
+    }
+    tr:nth-child(even) td { background: #fafbfc; }
+    .doc-links { margin-top: 0.5rem; }
+    .doc-links li { margin-bottom: 0.35rem; }
+    footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    @media print {
+      body { background: #fff; }
+      .wrap { padding: 0; max-width: 100%; }
+      header.report-header, section {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+      section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="report-header">
+      <h1>Schiller India Services — Legacy to Modern Stack Migration Status</h1>
+      <div class="meta">
+        <span><strong>Document type:</strong> Executive / stakeholder overview</span><br />
+        <span><strong>Scope:</strong> High-level parity between legacy JSP (<span class="mono">WebContent/</span>) and new stack (<span class="mono">schiller-frontend</span> + <span class="mono">schiller-backend</span>)</span><br />
+        <span><strong>Last updated:</strong> April 2026</span>
+      </div>
+    </header>
+
+    <section id="executive-summary">
+      <h2>1. Executive summary</h2>
+      <p>The organization is migrating from a <strong>Java EE / JSP monolith</strong> (session-based <code>logrole</code>, dashboard includes, servlet-backed screens) to a <strong>Next.js</strong> front end and <strong>Spring Boot REST API</strong> with JWT-based roles, Flyway-managed schema, and shared business data where modules have been wired through.</p>
+      <p><strong>What is in good shape:</strong> The <strong>operational spine</strong> used by administrators and engineers—service master and queues, call and activity registers, PRF/OB, non-salable and salables, BIR (including closed views and exports), parts/spares entry, escalations, and substantial master data (divisions, employees, dealers)—has been implemented in the new stack with role-aware routing and navigation.</p>
+      <p><strong>What still needs deliberate work:</strong> Full <strong>menu and permission parity</strong> for every legacy role (especially <strong>Vice Chancellor</strong>, <strong>service coordinator</strong>, <strong>repair team</strong>, and <strong>product support</strong>), legacy-only <strong>administration</strong> screens (company master, dropdown values, email settings, auto-escalation mail configuration), <strong>repair-team-specific</strong> queues, <strong>batch/mail</strong> jobs and utilities that never lived in the JSP menus, and a <strong>systematic audit</strong> of business rules vs legacy DAO SQL.</p>
+      <p>Percentages in this report are <strong>qualitative engineering estimates</strong> of <em>user-visible menu intent</em>, not a line-count of the entire WAR. They support planning and communication, not contractual completion metrics.</p>
+    </section>
+
+    <section id="architecture">
+      <h2>2. Architecture snapshot</h2>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Legacy</th><th>New</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>UI</td>
+            <td>JSP + includes (<code>index.jsp</code> → role dashboard)</td>
+            <td>Next.js App Router under <code>schiller-frontend/src/app/(dashboard)/</code></td>
+          </tr>
+          <tr>
+            <td>Auth</td>
+            <td>HTTP session, <code>logrole</code></td>
+            <td>JWT; role claims aligned to <code>AppRole</code> in <code>schiller-frontend/src/lib/auth.ts</code></td>
+          </tr>
+          <tr>
+            <td>API</td>
+            <td>Servlets / JSP actions</td>
+            <td>REST under <code>schiller-backend</code> (<code>/api/...</code>), Spring Security</td>
+          </tr>
+          <tr>
+            <td>Data</td>
+            <td>Legacy JDBC / DAOs</td>
+            <td>JPA + Flyway migrations where migrated modules apply</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Related internal documents</h3>
+      <ul class="doc-links">
+        <li><code>docs/AUTHENTICATION_AUTHORIZATION_IMPLEMENTATION_PLAN.md</code> — auth model and rollout considerations</li>
+        <li><code>docs/ADMIN_LEGACY_MODULES.md</code> — admin legacy module analysis</li>
+        <li><code>docs/ENGINEER_SERVICE_MODULE_MIGRATION.md</code> — engineer / service migration notes</li>
+        <li><code>docs/ARCHITECTURE_DIAGRAM.html</code> — high-level architecture diagrams in HTML</li>
+        <li><code>docs/MIGRATION_STATUS.md</code> — Markdown source of this report</li>
+        <li><code>docs/MIGRATION_REMAINING_TODO.html</code> — agent-ready remaining migration todo list</li>
+      </ul>
+    </section>
+
+    <section id="legacy-routing">
+      <h2>3. Legacy entry routing (<code>index.jsp</code>)</h2>
+      <p>After login, the legacy shell includes <strong>one</strong> dashboard by session role:</p>
+      <table>
+        <thead>
+          <tr><th>Legacy <code>logrole</code> (session)</th><th>Included dashboard</th><th>Typical user</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>admin</code></td><td><code>admindashboard.jsp</code></td><td>Full administration</td></tr>
+          <tr><td><code>Engineer</code></td><td><code>engineerdashboard.jsp</code></td><td>Field / service engineer</td></tr>
+          <tr><td><code>FQC</code></td><td><code>FQCdashboard.jsp</code></td><td>Factory quality control</td></tr>
+          <tr><td><code>ViceChancellor</code></td><td><code>VPDashboard.jsp</code></td><td>Executive / VP-style access</td></tr>
+          <tr><td><code>servicecoordinator</code></td><td><code>ServiceCoorDashBoard.jsp</code></td><td>Coordinator workflows</td></tr>
+          <tr><td><code>repairteam</code></td><td><code>repairDashboard.jsp</code></td><td>Repair bench / workshop</td></tr>
+          <tr><td><em>(default)</em></td><td><code>PSdashboard.jsp</code></td><td>Product support style</td></tr>
+        </tbody>
+      </table>
+      <p>The new app maps these concepts to normalized roles (e.g. <code>VICE_CHANCELLOR</code>, <code>SERVICE_COORDINATOR</code>, <code>REPAIR_TEAM</code>, <code>PRODUCT_SUPPORT</code>) and uses <strong>default landing routes</strong> plus <strong><code>isAllowedDashboardPath</code></strong> to enforce which URLs each role may open.</p>
+    </section>
+
+    <section id="completion">
+      <h2>4. Completion overview (qualitative)</h2>
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Admin — services &amp; queues</td><td><strong>Strong</strong></td><td>Service master, under repair, pending FRN, OB pending, SC closed, closed product, scrap-style lists where implemented</td></tr>
+          <tr><td>Admin — activity &amp; registers</td><td><strong>Strong</strong></td><td>Pending/closed activity, call register, closed calls, PRF/OB admin + closed, non-salable, salables, BIR admin + closed</td></tr>
+          <tr><td>Admin — spares &amp; escalations</td><td><strong>Good</strong></td><td>Part/spares entry, escalation-related UI where built</td></tr>
+          <tr><td>Admin — master data (partial)</td><td><strong>Mixed</strong></td><td>Divisions, employees, dealers in new app; <strong>company</strong> and some legacy-only masters may still be legacy-only</td></tr>
+          <tr><td>Admin — settings &amp; mail</td><td><strong>Weak / legacy</strong></td><td>Dropdown admin, email settings, auto-escalation mail entry/list (legacy JSPs) not replaced end-to-end in new UI</td></tr>
+          <tr><td>Engineer</td><td><strong>Good</strong></td><td>Core queues and registers in engineer dashboard and APIs; some legacy JSP variants consolidated into fewer routes</td></tr>
+          <tr><td>FQC</td><td><strong>Good</strong></td><td>Dedicated FQC landing and paths for activity, non-salable, salables, BIR (+ closed BIR) aligned to legacy FQC menu intent</td></tr>
+          <tr><td>Vice Chancellor</td><td><strong>Partial</strong></td><td>New default emphasizes reports and a <strong>narrower</strong> allow-list than the broad legacy VP sidebar</td></tr>
+          <tr><td>Service coordinator</td><td><strong>Partial</strong></td><td>Legacy menu includes PRF/OB and <strong>spares list / completed</strong>; new coordinator allow-list is <strong>smaller</strong> than legacy—parity gap</td></tr>
+          <tr><td>Repair team</td><td><strong>Partial</strong></td><td>Legacy <code>repairList*.jsp</code>; new stack defaults repair to <strong>under repair</strong> without full repair-menu parity module</td></tr>
+          <tr><td>Product support</td><td><strong>Partial</strong></td><td>Overlap with calls/PRF/BIR; no full PS dashboard clone of legacy <code>PSdashboard.jsp</code></td></tr>
+          <tr><td>Non-UI legacy (jobs, exports, DAO-only)</td><td><strong>Not counted</strong></td><td>Mail jobs, batch DAOs, servlet-only flows remain a large <strong>separate</strong> migration bucket</td></tr>
+        </tbody>
+      </table>
+      <h3>Order-of-magnitude estimates (menu / product intent)</h3>
+      <table>
+        <thead>
+          <tr><th>Segment</th><th>Approx. range</th><th>Disclaimer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Admin day-to-day operational menus</td><td><strong>~70–85%</strong></td><td>Excludes company/settings/email/escalation-mail admin unless separately delivered</td></tr>
+          <tr><td>Engineer surface</td><td><strong>~65–80%</strong></td><td>Depends on consolidation of legacy-only JSP variants</td></tr>
+          <tr><td>FQC (small legacy menu)</td><td><strong>~80–90%</strong></td><td>Field-level and rule parity still need verification per screen</td></tr>
+          <tr><td>VP / coordinator / repair / PS</td><td><strong>~25–50%</strong> each</td><td>Intentionally scoped smaller in new <code>auth.ts</code> vs broad legacy sidebars</td></tr>
+          <tr><td>Entire legacy WAR (all JSP + jobs)</td><td><strong>Minority by file count</strong></td><td>Most legacy files not yet superseded; focus has been the <strong>main operational spine</strong></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="gaps">
+      <h2>5. Notable gaps and risks (planning)</h2>
+      <ol>
+        <li><strong>Role allow-list vs navigation</strong> — Links in <code>navigation.ts</code> that are not allowed in <code>auth.ts</code> will block users; review menus and <code>isAllowedDashboardPath</code> together (e.g. engineer <strong>spares</strong> routes if present in nav but absent from allowed prefixes).</li>
+        <li><strong>VP vs legacy <code>VPDashboard.jsp</code></strong> — Legacy VP menus overlap heavily with admin lists; new VP access is <strong>restricted</strong> by design until scope is confirmed.</li>
+        <li><strong>Service coordinator spares</strong> — Legacy <code>spareslist_*</code> coordinator flows need explicit new routes + API parity or documented retirement.</li>
+        <li><strong>Repair team</strong> — Dedicated repair list / closed repair from <code>repairDashboard.jsp</code> need dedicated Next pages + APIs or documented merge into existing service queues.</li>
+        <li><strong>Admin configuration</strong> — Company master, <code>DropdownValuesForm.jsp</code>, <code>EmailSettings.jsp</code>, and auto-escalation mail JSPs remain <strong>high-visibility</strong> gaps for “turn off legacy” discussions.</li>
+        <li><strong>Parity testing</strong> — Filters, division scope, engineer vs admin exports, and legacy SQL edge cases vs new <code>Specification</code>/service layer need <strong>structured regression</strong>, not UI-only assumption.</li>
+      </ol>
+    </section>
+
+    <section id="next-steps">
+      <h2>6. Recommended next steps</h2>
+      <ol>
+        <li><strong>Menu matrix</strong> — Spreadsheet: each legacy sidebar link (per role) → URL → status (Done / Partial / N/A / Won’t migrate).</li>
+        <li><strong>Close role gaps</strong> — Prioritize coordinator spares, repair lists, VP scope decision, PS landing parity.</li>
+        <li><strong>Settings / mail</strong> — Decide migrate vs retire vs externalize (ticketing, MDM, etc.).</li>
+        <li><strong>Hardening</strong> — Role smoke tests against <code>defaultDashboardRouteForRole</code> and <code>isAllowedDashboardPath</code>, plus API contract tests for critical lists and exports.</li>
+      </ol>
+    </section>
+
+    <section id="document-control">
+      <h2>7. Document control</h2>
+      <table>
+        <thead>
+          <tr><th>Version</th><th>Date</th><th>Summary</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1.0</td><td>Apr 2026</td><td>Initial stakeholder migration overview</td></tr>
+          <tr><td>1.1</td><td>Apr 2026</td><td>HTML presentation format added</td></tr>
+        </tbody>
+      </table>
+      <footer>
+        Prepared from legacy <code>WebContent/index.jsp</code> role routing, legacy dashboard JSP menus, and current <code>schiller-frontend</code> / <code>schiller-backend</code> structure. For detailed module breakdowns, use the linked <code>docs/*</code> Markdown files.
+      </footer>
+    </section>
+  </div>
+</body>
+</html>

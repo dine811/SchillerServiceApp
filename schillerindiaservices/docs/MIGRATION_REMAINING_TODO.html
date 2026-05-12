@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Remaining Migration Todo List - Schiller India Services</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --paper: #ffffff;
+      --text: #1a1d24;
+      --muted: #5c6370;
+      --border: #e2e5eb;
+      --accent: #0f4c81;
+      --accent-soft: #e8f0f8;
+      --p0: #7f1d1d;
+      --p1: #92400e;
+      --p2: #0f766e;
+      --p3: #475569;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    header, section {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1.25rem;
+    }
+    header {
+      padding: 1.75rem;
+      border-left: 4px solid var(--accent);
+    }
+    section { padding: 1.35rem 1.5rem; }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.55rem;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      margin: 0 0 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.08rem;
+      color: var(--accent);
+    }
+    h3 { margin: 1rem 0 0.5rem; font-size: 0.98rem; }
+    p { margin: 0 0 0.75rem; }
+    ul, ol { margin: 0 0 0.75rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.5rem 0 0.25rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.52rem 0.6rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-weight: 650;
+    }
+    tr:nth-child(even) td { background: #fafbfc; }
+    code {
+      font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+      font-size: 0.88em;
+      background: #f0f2f6;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+    .meta { color: var(--muted); font-size: 0.92rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.12rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 650;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .p0 { background: var(--p0); }
+    .p1 { background: var(--p1); }
+    .p2 { background: var(--p2); }
+    .p3 { background: var(--p3); }
+    .status { white-space: nowrap; color: var(--muted); font-weight: 600; }
+    .note {
+      border-left: 3px solid var(--accent);
+      background: #f8fafc;
+      padding: 0.75rem 0.85rem;
+      border-radius: 6px;
+      margin-top: 0.75rem;
+    }
+    footer {
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-style: italic;
+      margin-top: 1.5rem;
+    }
+    @media print {
+      body { background: #fff; }
+      .wrap { max-width: 100%; padding: 0; }
+      header, section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Schiller India Services - Remaining Migration Todo List</h1>
+      <div class="meta">
+        <strong>Purpose:</strong> Agent-ready backlog for completing the remaining legacy JSP to Next.js/Spring Boot migration.<br />
+        <strong>Source reports:</strong> <code>MIGRATION_STATUS.html</code>, <code>MIGRATION_STATUS.md</code>, <code>ADMIN_LEGACY_MODULES.md</code>, <code>ENGINEER_SERVICE_MODULE_MIGRATION.md</code>, <code>AUTHENTICATION_AUTHORIZATION_IMPLEMENTATION_PLAN.md</code><br />
+        <strong>Last updated:</strong> April 2026
+      </div>
+    </header>
+
+    <section>
+      <h2>How to use this backlog</h2>
+      <ul>
+        <li>Assign <strong>one agent per ticket</strong> where possible.</li>
+        <li>Keep each ticket small enough to finish as one branch / PR.</li>
+        <li>The <strong>manager agent</strong> owns this file, updates status, resolves overlaps, and reviews role/auth parity.</li>
+        <li>Recommended status values: <code>TODO</code>, <code>IN PROGRESS</code>, <code>BLOCKED</code>, <code>REVIEW</code>, <code>DONE</code>, <code>WONT MIGRATE</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Priority summary</h2>
+      <table>
+        <thead><tr><th>Priority</th><th>Area</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge p0">P0</span></td><td>Role and navigation parity</td><td>Users can see links that may be blocked by auth, or may miss legacy links entirely.</td></tr>
+          <tr><td><span class="badge p0">P0</span></td><td>Auth and API security hardening</td><td>Migration cannot safely replace legacy until APIs and data scopes are enforced.</td></tr>
+          <tr><td><span class="badge p1">P1</span></td><td>Coordinator spares</td><td>Legacy service coordinator flow is not fully represented in current role access.</td></tr>
+          <tr><td><span class="badge p1">P1</span></td><td>Repair team module</td><td>Legacy repair dashboard has dedicated repair queues not fully migrated.</td></tr>
+          <tr><td><span class="badge p1">P1</span></td><td>VP / Product Support parity</td><td>These roles have partial access in the new stack compared with legacy dashboards.</td></tr>
+          <tr><td><span class="badge p2">P2</span></td><td>Admin configuration modules</td><td>Company, dropdown values, email settings, auto-escalation mail remain legacy-only or unclear.</td></tr>
+          <tr><td><span class="badge p2">P2</span></td><td>Existing module parity improvements</td><td>BIR, non-salable, PRF/OB, calls, activity, services, and exports need structured parity checks.</td></tr>
+          <tr><td><span class="badge p3">P3</span></td><td>Regression, exports, docs, cutover</td><td>Needed before production switchover.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Manager agent checklist</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Status</th><th>Task</th><th>Acceptance criteria</th></tr></thead>
+        <tbody>
+          <tr><td>MGR-001</td><td class="status">TODO</td><td>Create complete legacy menu matrix for all seven dashboards from <code>index.jsp</code>.</td><td>Every link from each role dashboard has Done / Partial / Pending / Wont migrate status.</td></tr>
+          <tr><td>MGR-002</td><td class="status">TODO</td><td>Map every legacy menu link to a target Next route and backend API.</td><td>Matrix includes legacy JSP, target route, API endpoint, role access, data scope, and owner.</td></tr>
+          <tr><td>MGR-003</td><td class="status">TODO</td><td>Verify <code>navigation.ts</code> and <code>auth.ts</code> stay aligned.</td><td>No visible navigation item is blocked by <code>isAllowedDashboardPath</code>.</td></tr>
+          <tr><td>MGR-004</td><td class="status">TODO</td><td>Define branch/worktree ownership for parallel agents.</td><td>Each agent owns a non-overlapping ticket and branch; manager merges shared files.</td></tr>
+          <tr><td>MGR-005</td><td class="status">TODO</td><td>Maintain migration decision log.</td><td>Any retired legacy JSP flow is documented with reason and stakeholder approval.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>P0 - Role, navigation, and authorization</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Status</th><th>Suggested owner</th><th>Task</th><th>Acceptance criteria</th></tr></thead>
+        <tbody>
+          <tr><td>AUTH-001</td><td class="status">TODO</td><td>Auth agent</td><td>Audit current auth implementation against the auth implementation plan.</td><td>Report implemented, partial, and pending items: login, refresh, logout, <code>/api/auth/me</code>, JWT filter, password hashing, route guard, API auth.</td></tr>
+          <tr><td>AUTH-002</td><td class="status">TODO</td><td>Auth agent</td><td>Enforce backend endpoint role guards.</td><td>Operational APIs require auth; master endpoints are admin-only unless approved; unauthorized calls return 401/403.</td></tr>
+          <tr><td>AUTH-003</td><td class="status">TODO</td><td>Auth agent</td><td>Enforce data-level scope for non-admin roles.</td><td>Non-admin users cannot bypass division/assignment filters through query params.</td></tr>
+          <tr><td>AUTH-004</td><td class="status">TODO</td><td>Frontend role agent</td><td>Fix role-specific default landing pages if stakeholders want legacy parity.</td><td>VP, coordinator, repair, and PS land on approved route hubs.</td></tr>
+          <tr><td>AUTH-005</td><td class="status">TODO</td><td>Frontend role agent</td><td>Align engineer spares routes between nav and auth.</td><td><code>/dashboard/spares</code> and <code>/dashboard/spares-completed</code> are either allowed for engineer or removed from engineer nav.</td></tr>
+          <tr><td>AUTH-006</td><td class="status">TODO</td><td>QA agent</td><td>Add role smoke-test checklist.</td><td>Checklist covers all seven normalized roles.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>P1 - Role-specific page gaps</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Status</th><th>Suggested owner</th><th>Legacy source</th><th>Target / task</th><th>Acceptance criteria</th></tr></thead>
+        <tbody>
+          <tr><td>SC-001</td><td class="status">TODO</td><td>Coordinator agent</td><td><code>ServiceCoorDashBoard.jsp</code></td><td>Coordinator nav review</td><td>Coordinator navigation matches approved legacy menu scope.</td></tr>
+          <tr><td>SC-002</td><td class="status">TODO</td><td>Coordinator agent</td><td>Coordinator PRF/OB menu</td><td>Coordinator PRF/OB access</td><td>Coordinator can view/update correct PRF/OB items with correct data scope.</td></tr>
+          <tr><td>SC-003</td><td class="status">TODO</td><td>Coordinator spares agent</td><td><code>spareslist_*</code></td><td>Spares update/completed flow</td><td>Coordinator can update spares requests and view completed spares as in legacy.</td></tr>
+          <tr><td>REP-001</td><td class="status">TODO</td><td>Repair agent</td><td><code>repairDashboard.jsp</code></td><td>Repair module design</td><td>Dedicated routes vs merged service queues decision recorded.</td></tr>
+          <tr><td>REP-002</td><td class="status">TODO</td><td>Repair agent</td><td><code>repairList*.jsp</code></td><td>Repair pending queues</td><td>Repair team can access pending repair queues equivalent to legacy PFRN/OB/UR flows.</td></tr>
+          <tr><td>REP-003</td><td class="status">TODO</td><td>Repair agent</td><td><code>repairList_Closed.jsp</code></td><td>Closed repair list</td><td>Closed repair list is available with filters and role scope.</td></tr>
+          <tr><td>VP-001</td><td class="status">TODO</td><td>VP agent</td><td><code>VPDashboard.jsp</code></td><td>VP role matrix</td><td>Exact VP legacy menu is compared against current <code>VICE_CHANCELLOR</code> allow-list.</td></tr>
+          <tr><td>VP-002</td><td class="status">TODO</td><td>VP agent</td><td>VP service/activity menus</td><td>VP route decision</td><td>Stakeholders decide broad read-only admin access vs reports-only access.</td></tr>
+          <tr><td>PS-001</td><td class="status">TODO</td><td>Product support agent</td><td><code>PSdashboard.jsp</code></td><td>PS role matrix</td><td>Exact PS legacy menu is mapped to new routes or retirement decisions.</td></tr>
+          <tr><td>PS-002</td><td class="status">TODO</td><td>Product support agent</td><td>PS call/activity/BIR menus</td><td>Product support dashboard/access</td><td>PS has clear landing page and correct access to calls, PRF/OB, BIR, and related lists.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>P2 - Admin configuration and module parity</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Status</th><th>Suggested owner</th><th>Area</th><th>Task</th><th>Acceptance criteria</th></tr></thead>
+        <tbody>
+          <tr><td>ADM-001</td><td class="status">TODO</td><td>Admin master agent</td><td>Company</td><td>Migrate or retire company master.</td><td>Company master exists in new UI or retirement is approved.</td></tr>
+          <tr><td>ADM-002</td><td class="status">TODO</td><td>Admin config agent</td><td>Dropdown values</td><td>Migrate or retire <code>DropdownValuesForm.jsp</code>.</td><td>Dropdown values can be managed in new UI or documented as no longer needed.</td></tr>
+          <tr><td>ADM-003</td><td class="status">TODO</td><td>Admin mail agent</td><td>Email settings</td><td>Migrate or externalize <code>EmailSettings.jsp</code>.</td><td>Email settings are migrated, externalized, or environment-only.</td></tr>
+          <tr><td>ADM-004</td><td class="status">TODO</td><td>Escalation agent</td><td>Auto escalation mail</td><td>Migrate or retire auto-escalation mail entry/list.</td><td>Functions exist in new stack or retirement is approved.</td></tr>
+          <tr><td>MOD-001</td><td class="status">TODO</td><td>BIR agent</td><td>BIR</td><td>Re-check list, delete, export, filters, and role scope.</td><td>BIR behavior matches approved legacy parity.</td></tr>
+          <tr><td>MOD-002</td><td class="status">TODO</td><td>BIR agent</td><td>BIR edit</td><td>Decide whether legacy BIR edit/update flow must be migrated.</td><td>Decision recorded; if required, edit page/API implemented and tested.</td></tr>
+          <tr><td>MOD-003</td><td class="status">TODO</td><td>Non-salable agent</td><td>Non-salable/salables</td><td>Re-check filters, delete, export, division filter, role scope.</td><td>Behavior matches legacy role expectations.</td></tr>
+          <tr><td>MOD-004</td><td class="status">TODO</td><td>Non-salable agent</td><td>Non-salable edit</td><td>Decide whether update flow must be migrated.</td><td>Decision recorded; if required, edit page/API implemented and tested.</td></tr>
+          <tr><td>MOD-005</td><td class="status">TODO</td><td>PRF/OB agent</td><td>PRF/OB</td><td>Verify access for admin, engineer, coordinator, VP, and PS.</td><td>Each role sees correct records and actions.</td></tr>
+          <tr><td>MOD-006</td><td class="status">TODO</td><td>Calls agent</td><td>Call register</td><td>Verify pending/closed calls across roles.</td><td>Legacy filters and role visibility are documented and implemented.</td></tr>
+          <tr><td>MOD-007</td><td class="status">TODO</td><td>Activity agent</td><td>Activity</td><td>Verify edit, validation, close/reopen, filters, and role scope.</td><td>Activity module passes role-based regression checklist.</td></tr>
+          <tr><td>MOD-008</td><td class="status">TODO</td><td>Services agent</td><td>Service queues</td><td>Verify all queue pages use legacy-equivalent status filters.</td><td>Services, under repair, pending FRN, OB pending, SC closed, closed product, and scrap match legacy definitions.</td></tr>
+          <tr><td>MOD-009</td><td class="status">TODO</td><td>Export agent</td><td>Excel exports</td><td>Compare columns and filters for critical exports.</td><td>Exports have approved columns, file names, date handling, and role scope.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>P3 - Testing, deployment, and cutover</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Status</th><th>Suggested owner</th><th>Task</th><th>Acceptance criteria</th></tr></thead>
+        <tbody>
+          <tr><td>QA-001</td><td class="status">TODO</td><td>QA agent</td><td>Build a per-role manual test script.</td><td>Covers login, nav, list loading, search, export, create/edit/delete where applicable, logout.</td></tr>
+          <tr><td>QA-002</td><td class="status">TODO</td><td>QA agent</td><td>Add smoke tests for critical routes.</td><td>Covers admin, engineer, FQC, BIR, non-salable, services, PRF/OB, calls.</td></tr>
+          <tr><td>QA-003</td><td class="status">TODO</td><td>Backend QA agent</td><td>Add API contract tests for critical filters.</td><td>Tests cover role scope, date range, status filters, and division filters.</td></tr>
+          <tr><td>QA-004</td><td class="status">TODO</td><td>Data agent</td><td>Validate Flyway migrations against imported legacy data.</td><td>Fresh DB and migrated DB both start cleanly; Hibernate validation passes.</td></tr>
+          <tr><td>QA-005</td><td class="status">TODO</td><td>Data agent</td><td>Prepare legacy-to-new data validation checklist.</td><td>Counts between legacy and new match for key tables/statuses.</td></tr>
+          <tr><td>CUT-001</td><td class="status">TODO</td><td>Release manager</td><td>Define cutover plan.</td><td>Plan covers freeze window, data import, app switch, rollback, and legacy read-only period.</td></tr>
+          <tr><td>CUT-002</td><td class="status">TODO</td><td>Release manager</td><td>Define retired legacy modules.</td><td>Stakeholders sign off on modules marked <code>WONT MIGRATE</code>.</td></tr>
+          <tr><td>CUT-003</td><td class="status">TODO</td><td>Release manager</td><td>Production readiness review.</td><td>Secrets, CORS, HTTPS, backup, logs, monitoring, and user onboarding are checked.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Suggested parallel agent grouping</h2>
+      <table>
+        <thead><tr><th>Agent</th><th>Tickets</th></tr></thead>
+        <tbody>
+          <tr><td>Manager agent</td><td>MGR-001 to MGR-005, merge coordination, shared file review</td></tr>
+          <tr><td>Auth/role agent</td><td>AUTH-001 to AUTH-006</td></tr>
+          <tr><td>Coordinator agent</td><td>SC-001 to SC-005</td></tr>
+          <tr><td>Repair agent</td><td>REP-001 to REP-005</td></tr>
+          <tr><td>VP/PS agent</td><td>VP-001 to VP-003, PS-001 to PS-003</td></tr>
+          <tr><td>Admin config agent</td><td>ADM-001 to ADM-005</td></tr>
+          <tr><td>Module parity agents</td><td>MOD-001 to MOD-009 split by module</td></tr>
+          <tr><td>QA/release agent</td><td>QA-001 to QA-005, CUT-001 to CUT-003</td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        <strong>First recommended sprint:</strong> complete <code>MGR-001</code>, <code>MGR-002</code>, <code>AUTH-005</code>, and <code>AUTH-001</code>; then assign <code>SC-003</code> and <code>REP-002</code> to separate implementation agents.
+      </div>
+      <footer>
+        Markdown source: <code>docs/MIGRATION_REMAINING_TODO.md</code>.
+      </footer>
+    </section>
+  </div>
+</body>
+</html>
