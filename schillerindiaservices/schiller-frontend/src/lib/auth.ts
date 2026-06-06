@@ -19,7 +19,7 @@ export function defaultDashboardRouteForRole(role: string | null | undefined): s
     case "VICE_CHANCELLOR":
       return "/dashboard/reports";
     case "SERVICE_COORDINATOR":
-      return "/dashboard/call-list";
+      return "/dashboard/service-coordinator";
     case "REPAIR_TEAM":
       return "/dashboard/under-repair";
     case "PRODUCT_SUPPORT":
@@ -70,7 +70,15 @@ export function isAllowedDashboardPath(role: string | null | undefined, pathname
       "/dashboard/bir-admin",
       "/dashboard/bir-closed-admin"
     );
-  } else if (r === "PRODUCT_SUPPORT" || r === "SERVICE_COORDINATOR" || r === "REPAIR_TEAM") {
+  } else if (r === "SERVICE_COORDINATOR") {
+    allowed.push(
+      "/dashboard/service-coordinator",
+      "/dashboard/prf-ob-admin",
+      "/dashboard/prf-ob-closed",
+      "/dashboard/spares",
+      "/dashboard/spares-completed"
+    );
+  } else if (r === "PRODUCT_SUPPORT" || r === "REPAIR_TEAM") {
     allowed.push("/dashboard/services", "/dashboard/call-list", "/dashboard/prf-ob-admin", "/dashboard/non-salable-admin", "/dashboard/bir-admin");
     if (r === "REPAIR_TEAM") allowed.push("/dashboard/under-repair");
   } else if (r === "VICE_CHANCELLOR") {

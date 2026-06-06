@@ -1,0 +1,77 @@
+"use client";
+
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Boxes, ClipboardCheck, ClipboardList } from "lucide-react";
+
+/**
+ * Legacy: index.jsp servicecoordinator → ServiceCoorDashBoard.jsp
+ */
+export default function ServiceCoordinatorDashboardPage() {
+  const items = [
+    {
+      label: "PRF/OB Register",
+      href: "/dashboard/prf-ob-admin",
+      legacy: "PRFOB_AdminList.jsp",
+      icon: ClipboardList,
+    },
+    {
+      label: "Closed PRF/OB Register",
+      href: "/dashboard/prf-ob-closed",
+      legacy: "PRFOB_AdminList_closed.jsp",
+      icon: ClipboardCheck,
+    },
+    {
+      label: "Spares Request Update",
+      href: "/dashboard/spares",
+      legacy: "spareslist_update.jsp",
+      icon: Boxes,
+    },
+    {
+      label: "Spares List Completed",
+      href: "/dashboard/spares-completed",
+      legacy: "spareslist_serviceco2_Completed2.jsp",
+      icon: Boxes,
+    },
+  ] as const;
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Service Coordinator</h1>
+        <p className="text-sm text-slate-500 mt-1">Migrated from legacy <code>ServiceCoorDashBoard.jsp</code>.</p>
+      </div>
+
+      <Card className="rounded-2xl border-slate-100 shadow-sm">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold text-slate-800">Coordinator workflows</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {items.map((item) => (
+              <Link key={item.href} href={item.href} className="block">
+                <div className="rounded-xl border border-slate-200 bg-white p-3.5 transition-colors hover:bg-slate-50">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-8 w-8 rounded-lg bg-slate-100 flex items-center justify-center">
+                        <item.icon className="h-4 w-4 text-slate-700" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-900">{item.label}</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">Legacy {item.legacy}</p>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="text-[10px] bg-emerald-50 border-emerald-200 text-emerald-700">
+                      Ready
+                    </Badge>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

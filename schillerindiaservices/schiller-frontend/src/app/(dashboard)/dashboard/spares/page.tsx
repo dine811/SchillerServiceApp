@@ -3,6 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  canCreateSparesForRole,
+  canDeleteSparesForRole,
+  isServiceCoordinator,
+  isSparesAllDivisionsRole,
+} from "@/lib/app-role";
 import { ServiceService, type SpareMasterRecord } from "@/services/service-service";
 
 type MeResponse = { role?: string };
@@ -21,6 +27,9 @@ export default function SparesPage() {
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [isPrivileged, setIsPrivileged] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
+  const [canCreate, setCanCreate] = useState(false);
+  const [isCoordinator, setIsCoordinator] = useState(false);
 
   const canGoPrev = page > 0;
   const canGoNext = page + 1 < totalPages;
@@ -31,8 +40,11 @@ export default function SparesPage() {
       .then((r) => (r.ok ? r.json() : null))
       .then((me: MeResponse | null) => {
         if (!mounted) return;
-        const role = (me?.role ?? "").toUpperCase();
-        setIsPrivileged(role === "ADMIN" || role === "VICE_CHANCELLOR");
+        const role = me?.role ?? "";
+        setIsPrivileged(isSparesAllDivisionsRole(role));
+        setCanDelete(canDeleteSparesForRole(role));
+        setCanCreate(canCreateSparesForRole(role));
+        setIsCoordinator(isServiceCoordinator(role));
       })
       .catch(() => undefined);
     return () => {
@@ -106,16 +118,24 @@ export default function SparesPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Spares List</h1>
-          <p className="text-sm text-slate-500">Legacy parity for `spareslist_engg.jsp` (status pending).</p>
+          <h1 className="text-2xl font-bold text-slate-900">
+            {isCoordinator ? "Spares Request Update" : "Spares List"}
+          </h1>
+          <p className="text-sm text-slate-500">
+            {isCoordinator
+              ? "Legacy spareslist_update.jsp — pending spares, all divisions (Update only)."
+              : "Legacy spareslist_engg.jsp — pending spares."}
+          </p>
         </div>
         <div className="flex gap-2">
           <Link href="/dashboard/spares-completed" className="rounded border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
             Closed List
           </Link>
-          <Link href="/dashboard/spares/add" className="rounded bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
-            Add New Entry
-          </Link>
+          {canCreate ? (
+            <Link href="/dashboard/spares/add" className="rounded bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
+              Add New Entry
+            </Link>
+          ) : null}
         </div>
       </div>
 
@@ -195,7 +215,7 @@ export default function SparesPage() {
                       >
                         Update
                       </button>
-                      {isPrivileged ? (
+                      {canDelete ? (
                         <button onClick={() => void onDelete(row.id)} className="text-red-600 hover:underline">
                           Delete
                         </button>

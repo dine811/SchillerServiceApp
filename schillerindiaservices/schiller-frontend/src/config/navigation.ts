@@ -280,6 +280,46 @@ export const engineerNavSections: NavSection[] = [
   },
 ];
 
+/** Legacy service coordinator sidebar (ServiceCoorDashBoard.jsp). */
+export const serviceCoordinatorNavSections: NavSection[] = [
+  {
+    id: "activity",
+    title: "Coordinator",
+    items: [
+      {
+        label: "Dashboard",
+        href: "/dashboard/service-coordinator",
+        icon: LayoutDashboard,
+        gradient: "from-violet-500 to-indigo-500",
+      },
+      {
+        label: "PRF/OB Register",
+        href: "/dashboard/prf-ob-admin",
+        icon: ClipboardList,
+        gradient: "from-violet-500 to-purple-600",
+      },
+      {
+        label: "Closed PRF/OB Register",
+        href: "/dashboard/prf-ob-closed",
+        icon: ClipboardCheck,
+        gradient: "from-emerald-500 to-teal-600",
+      },
+      {
+        label: "Spares Request Update",
+        href: "/dashboard/spares",
+        icon: Boxes,
+        gradient: "from-cyan-500 to-sky-600",
+      },
+      {
+        label: "Spares List Completed",
+        href: "/dashboard/spares-completed",
+        icon: Boxes,
+        gradient: "from-emerald-500 to-teal-600",
+      },
+    ],
+  },
+];
+
 /** Legacy FQC sidebar (FQCdashboard.jsp). */
 export const fqcNavSections: NavSection[] = [
   {
@@ -330,6 +370,7 @@ export function navSectionsForRole(role: string | null | undefined): NavSection[
   const normalized = (role ?? "").toUpperCase();
   if (normalized === "ENGINEER") return engineerNavSections;
   if (normalized === "FQC") return fqcNavSections;
+  if (normalized === "SERVICE_COORDINATOR") return serviceCoordinatorNavSections;
   if (normalized && normalized !== "ADMIN") return allowedNavSectionsForRole(normalized, dashboardNavSections);
   return dashboardNavSections;
 }

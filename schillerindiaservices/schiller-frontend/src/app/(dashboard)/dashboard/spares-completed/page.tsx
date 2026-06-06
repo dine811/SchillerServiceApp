@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { isServiceCoordinator, isSparesAllDivisionsRole } from "@/lib/app-role";
 import { ServiceService, type SpareMasterRecord } from "@/services/service-service";
 import { DatePicker } from "@/components/ui/date-picker";
 
@@ -22,6 +23,7 @@ export default function SparesCompletedPage() {
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [isPrivileged, setIsPrivileged] = useState(false);
+  const [isCoordinator, setIsCoordinator] = useState(false);
   const todayStart = useMemo(() => {
     const d = new Date();
     d.setHours(0, 0, 0, 0);
@@ -39,8 +41,9 @@ export default function SparesCompletedPage() {
       .then((r) => (r.ok ? r.json() : null))
       .then((me: MeResponse | null) => {
         if (!mounted) return;
-        const role = (me?.role ?? "").toUpperCase();
-        setIsPrivileged(role === "ADMIN" || role === "VICE_CHANCELLOR");
+        const role = me?.role ?? "";
+        setIsPrivileged(isSparesAllDivisionsRole(role));
+        setIsCoordinator(isServiceCoordinator(role));
       })
       .catch(() => undefined);
     return () => {
@@ -103,8 +106,14 @@ export default function SparesCompletedPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Spares List Completed</h1>
-          <p className="text-sm text-slate-500">Legacy parity for `spareslist_engg2_Completed.jsp`.</p>
+          <h1 className="text-2xl font-bold text-slate-900">
+            {isCoordinator ? "Spares List Completed" : "Spares List Completed"}
+          </h1>
+          <p className="text-sm text-slate-500">
+            {isCoordinator
+              ? "Legacy spareslist_serviceco2_Completed2.jsp."
+              : "Legacy spareslist_engg2_Completed.jsp."}
+          </p>
         </div>
         <Link href="/dashboard/spares" className="rounded border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
           Back to Pending
