@@ -5,17 +5,15 @@ import { NavSectionsProvider } from "@/contexts/nav-sections-context";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <NavSectionsProvider>
-    <div className="h-full relative">
-      <div className="hidden h-full md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-[80]">
-        <Sidebar />
+      <div className="relative min-h-screen overflow-x-hidden bg-slate-50/40">
+        <aside className="fixed inset-y-0 left-0 z-[80] hidden h-full w-64 flex-col overflow-hidden md:flex">
+          <Sidebar />
+        </aside>
+        <main className="flex min-h-screen min-w-0 flex-col md:pl-64">
+          <Navbar />
+          <div className="min-w-0 flex-1 p-6">{children}</div>
+        </main>
       </div>
-      <main className="md:pl-64 min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-1 p-6">
-          {children}
-        </div>
-      </main>
-    </div>
     </NavSectionsProvider>
   );
 };

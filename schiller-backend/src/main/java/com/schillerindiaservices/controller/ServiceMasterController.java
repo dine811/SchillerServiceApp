@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
+import com.schillerindiaservices.security.SecurityRoleUtils;
 
 @RestController
 @RequestMapping("/api/services")
@@ -36,10 +37,9 @@ public class ServiceMasterController {
                 ? Sort.Direction.DESC : Sort.Direction.ASC;
         String prop = sortParams[0].isBlank() ? "scRefNo" : sortParams[0];
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equalsIgnoreCase(a.getAuthority()));
+        boolean allDivisions = SecurityRoleUtils.isVpOperationalScope(authentication);
         return ResponseEntity.ok(serviceMasterService.findPendingFrnForUser(
-                authentication.getName(), isAdmin, scRef, search, pageable));
+                authentication.getName(), allDivisions, scRef, search, pageable));
     }
 
     /**
@@ -97,10 +97,9 @@ public class ServiceMasterController {
                 ? Sort.Direction.DESC : Sort.Direction.ASC;
         String prop = sortParams[0].isBlank() ? "scRefNo" : sortParams[0];
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equalsIgnoreCase(a.getAuthority()));
+        boolean allDivisions = SecurityRoleUtils.isVpOperationalScope(authentication);
         return ResponseEntity.ok(serviceMasterService.findScClosedProductForUser(
-                authentication.getName(), isAdmin, scRef, search, pageable));
+                authentication.getName(), allDivisions, scRef, search, pageable));
     }
 
     /**
@@ -155,13 +154,12 @@ public class ServiceMasterController {
         String[] sortParams = sort.split(",");
         Sort.Direction direction = sortParams[1].equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortParams[0]));
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equalsIgnoreCase(a.getAuthority()));
+        boolean allDivisions = SecurityRoleUtils.isVpOperationalScope(authentication);
         String username = authentication.getName();
 
         Page<ServiceMasterDTO> services = (search != null && !search.isBlank())
-                ? serviceMasterService.searchForUser(username, isAdmin, search, pageable)
-                : serviceMasterService.findAllForUser(username, isAdmin, pageable);
+                ? serviceMasterService.searchForUser(username, allDivisions, search, pageable)
+                : serviceMasterService.findAllForUser(username, allDivisions, pageable);
         return ResponseEntity.ok(services);
     }
 

@@ -67,7 +67,7 @@ The new app maps these concepts to normalized roles (e.g. `VICE_CHANCELLOR`, `SE
 | Admin — settings & mail | **Weak / legacy** | Dropdown admin, email settings, auto-escalation mail entry/list (legacy JSPs) not replaced end-to-end in new UI |
 | Engineer | **Good** | Core queues and registers reflected in engineer dashboard and APIs; some legacy JSP variants may be consolidated into fewer routes |
 | FQC | **Good** | Dedicated FQC landing and paths for activity, non-salable, salables, BIR (+ closed BIR) aligned to legacy FQC menu intent |
-| Vice Chancellor | **Partial** | New default emphasizes reports and a **narrower** allow-list than the broad legacy VP sidebar |
+| Vice Chancellor | **Good** | `/dashboard/vp` hub, full legacy `VPDashboard.jsp` menu (17 routes), all-divisions API scope; master-data and settings blocked |
 | Service coordinator | **Partial** | Legacy coordinator menu includes PRF/OB and **spares list / completed** style flows; new coordinator allow-list is **smaller** than legacy—parity gap |
 | Repair team | **Partial** | Legacy repair-specific lists (`repairList*.jsp`); new stack routes repair default to **under repair** but **not** a full repair-menu parity module |
 | Product support | **Partial** | Overlap with calls/PRF/BIR; no full PS dashboard clone of legacy `PSdashboard.jsp` |
@@ -80,7 +80,8 @@ The new app maps these concepts to normalized roles (e.g. `VICE_CHANCELLOR`, `SE
 | Admin day-to-day operational menus | **~70–85%** | Excludes company/settings/email/escalation-mail admin unless separately delivered |
 | Engineer surface | **~65–80%** | Depends on consolidation of legacy-only JSP variants |
 | FQC (small legacy menu) | **~80–90%** | Field-level and rule parity still need verification per screen |
-| VP / coordinator / repair / PS | **~25–50%** each | Intentionally scoped smaller in new `auth.ts` vs broad legacy sidebars |
+| VP (legacy `VPDashboard.jsp`) | **~85–90%** | Hub + nav + APIs wired; PRF/OB/BIR/non-salable **update** APIs still absent (list/export/delete OK) |
+| Coordinator / repair / PS | **~25–50%** each | Intentionally scoped smaller in new `auth.ts` vs broad legacy sidebars |
 | Entire legacy WAR (all JSP + jobs) | **Minority by file count** | Most legacy files are **not** yet superseded; delivery focus has been the **main operational spine** |
 
 ---
@@ -88,7 +89,7 @@ The new app maps these concepts to normalized roles (e.g. `VICE_CHANCELLOR`, `SE
 ## 5. Notable gaps and risks (planning)
 
 1. **Role allow-list vs navigation** — Any link shown in `navigation.ts` that is **not** allowed in `auth.ts` will block users mid-flow; menus and `isAllowedDashboardPath` should be reviewed together (example class: engineer **spares** routes if present in nav but absent from allowed prefixes).
-2. **VP vs legacy `VPDashboard.jsp`** — Legacy VP menus overlap heavily with admin lists; new VP access is **restricted** by design until scope is confirmed.
+2. **VP update APIs** — PRF/OB, non-salable, and BIR list screens lack `PUT` endpoints; VP can list/export/delete but not full legacy edit parity on those modules.
 3. **Service coordinator spares** — Legacy `spareslist_*` coordinator flows need explicit new routes + API parity or documented retirement.
 4. **Repair team** — Dedicated repair list / closed repair experiences from `repairDashboard.jsp` need either dedicated Next pages + APIs or documented merge into existing service queues.
 5. **Admin configuration** — Company master, `DropdownValuesForm.jsp`, `EmailSettings.jsp`, and auto-escalation mail JSPs remain **high-visibility** gaps for “we can turn off legacy” discussions.

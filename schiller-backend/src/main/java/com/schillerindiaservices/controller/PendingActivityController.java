@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import com.schillerindiaservices.security.SecurityRoleUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,12 +30,11 @@ public class PendingActivityController {
             @RequestParam(defaultValue = "id,desc") String sort,
             Authentication authentication
     ) {
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equalsIgnoreCase(a.getAuthority()));
+        boolean allDivisions = SecurityRoleUtils.isVpOperationalScope(authentication);
         return ResponseEntity.ok(
                 pendingActivityService.findPendingForUser(
                         authentication.getName(),
-                        isAdmin,
+                        allDivisions,
                         division,
                         search,
                         pageable(page, size, sort)

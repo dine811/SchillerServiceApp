@@ -29,4 +29,9 @@ public final class SecurityRoleUtils {
     public static boolean isSparesAllDivisionsScope(Authentication authentication) {
         return hasAnyRole(authentication, "ADMIN", "VICE_CHANCELLOR", "SERVICE_COORDINATOR");
     }
+
+    /** Legacy VP + admin: all divisions on operational service/queue lists. */
+    public static boolean isVpOperationalScope(Authentication authentication) {
+        return hasAnyRole(authentication, "ADMIN", "VICE_CHANCELLOR");
+    }
 }

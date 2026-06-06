@@ -13,6 +13,7 @@ import {
   type CallRegisterRecord,
 } from "@/services/service-service";
 import { DivisionService, type Division } from "@/services/division-service";
+import { isVpOperationalPrivileged } from "@/lib/app-role";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50] as const;
 
@@ -152,8 +153,8 @@ export default function CallListAdminPage() {
     }
   };
 
-  const isAdmin = role === "ADMIN";
-  const hasFilters = searchInput.trim() !== "" || (!!isAdmin && divisionFilter !== "");
+  const allDivisions = isVpOperationalPrivileged(role);
+  const hasFilters = searchInput.trim() !== "" || (!!allDivisions && divisionFilter !== "");
 
   const todayStart = (() => {
     const d = new Date();
@@ -226,7 +227,7 @@ export default function CallListAdminPage() {
         </div>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-1.5">
-            {isAdmin ? (
+            {allDivisions ? (
               <>
                 <label htmlFor="call-list-division" className="block text-sm font-medium text-slate-700">
                   Division

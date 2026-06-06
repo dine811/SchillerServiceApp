@@ -366,11 +366,139 @@ export const fqcNavSections: NavSection[] = [
   },
 ];
 
+/** Legacy VPDashboard.jsp — routes allowed for VICE_CHANCELLOR in auth.ts. */
+export const viceChancellorNavSections: NavSection[] = [
+  {
+    id: "services",
+    title: "Services & filters",
+    items: [
+      {
+        label: "Dashboard",
+        href: "/dashboard/vp",
+        icon: LayoutDashboard,
+        gradient: "from-violet-500 to-indigo-500",
+      },
+      {
+        label: "Services",
+        href: "/dashboard/services",
+        icon: Wrench,
+        gradient: "from-sky-500 to-cyan-500",
+      },
+      {
+        label: "Under repair",
+        href: "/dashboard/under-repair",
+        icon: Timer,
+        gradient: "from-amber-500 to-orange-500",
+      },
+      {
+        label: "Pending FRN",
+        href: "/dashboard/pending-frn",
+        icon: Puzzle,
+        gradient: "from-rose-500 to-pink-500",
+      },
+      {
+        label: "OB Pending",
+        href: "/dashboard/ob-pending",
+        icon: Package,
+        gradient: "from-amber-500 to-yellow-500",
+      },
+      {
+        label: "SC Closed",
+        href: "/dashboard/sc-closed",
+        icon: CheckCircle2,
+        gradient: "from-emerald-500 to-teal-500",
+      },
+      {
+        label: "Closed Product",
+        href: "/dashboard/new-closed",
+        icon: BadgeCheck,
+        gradient: "from-violet-500 to-purple-500",
+      },
+      {
+        label: "Scrap list",
+        href: "/dashboard/scrap-list",
+        icon: Trash2,
+        gradient: "from-stone-500 to-neutral-600",
+      },
+    ],
+  },
+  {
+    id: "activity",
+    title: "Activity registers",
+    items: [
+      {
+        label: "Call register",
+        href: "/dashboard/call-list",
+        icon: Phone,
+        gradient: "from-blue-500 to-indigo-600",
+      },
+      {
+        label: "Closed calls",
+        href: "/dashboard/closed-calls",
+        icon: CheckCircle2,
+        gradient: "from-emerald-500 to-teal-600",
+      },
+      {
+        label: "Pending activity",
+        href: "/dashboard/pending-activity",
+        icon: ClipboardList,
+        gradient: "from-indigo-500 to-violet-600",
+      },
+      {
+        label: "Closed activity",
+        href: "/dashboard/closed-activity",
+        icon: ClipboardCheck,
+        gradient: "from-emerald-500 to-teal-600",
+      },
+      {
+        label: "PRF/OB list",
+        href: "/dashboard/prf-ob-admin",
+        icon: ClipboardList,
+        gradient: "from-violet-500 to-purple-600",
+      },
+      {
+        label: "Closed PRF/OB",
+        href: "/dashboard/prf-ob-closed",
+        icon: ClipboardCheck,
+        gradient: "from-emerald-500 to-teal-600",
+      },
+      {
+        label: "Non salable list",
+        href: "/dashboard/non-salable-admin",
+        icon: ListX,
+        gradient: "from-amber-500 to-orange-600",
+      },
+      {
+        label: "Salables",
+        href: "/dashboard/salables",
+        icon: PackageCheck,
+        gradient: "from-teal-500 to-cyan-600",
+      },
+      {
+        label: "BIR list",
+        href: "/dashboard/bir-admin",
+        icon: FileSpreadsheet,
+        gradient: "from-indigo-500 to-violet-600",
+      },
+      {
+        label: "Closed BIR",
+        href: "/dashboard/bir-closed-admin",
+        icon: ClipboardCheck,
+        gradient: "from-sky-500 to-teal-600",
+      },
+    ],
+  },
+];
+
 export function navSectionsForRole(role: string | null | undefined): NavSection[] {
   const normalized = (role ?? "").toUpperCase();
   if (normalized === "ENGINEER") return engineerNavSections;
   if (normalized === "FQC") return fqcNavSections;
   if (normalized === "SERVICE_COORDINATOR") return serviceCoordinatorNavSections;
+  if (normalized === "VICE_CHANCELLOR") return viceChancellorNavSections;
+  if (normalized === "PRODUCT_SUPPORT" || normalized === "REPAIR_TEAM") {
+    return allowedNavSectionsForRole(normalized, dashboardNavSections);
+  }
   if (normalized && normalized !== "ADMIN") return allowedNavSectionsForRole(normalized, dashboardNavSections);
   return dashboardNavSections;
 }

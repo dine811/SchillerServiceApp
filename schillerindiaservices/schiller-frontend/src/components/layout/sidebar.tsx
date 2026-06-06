@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Bell, ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { navSectionsForRole } from "@/config/navigation";
 import { useNavSections } from "@/contexts/nav-sections-context";
 import { apiFetch, getApiBaseUrl } from "@/lib/api";
@@ -55,7 +55,10 @@ export const Sidebar = () => {
   const roleLabel = (profile?.role || "ADMIN").replaceAll("_", " ");
 
   return (
-    <div className="flex flex-col h-full" style={{ background: "linear-gradient(180deg, #0f1117 0%, #13151f 100%)" }}>
+    <div
+      className="flex h-full w-full min-w-0 flex-col overflow-hidden"
+      style={{ background: "linear-gradient(180deg, #0f1117 0%, #13151f 100%)" }}
+    >
       {/* Logo */}
       <div className="px-5 pt-7 pb-6 border-b border-white/[0.06]">
         <Link href="/dashboard" className="flex items-center gap-3 group">
@@ -73,7 +76,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Nav — collapsible sections (legacy nested menus) */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto" aria-label="Main navigation">
+      <nav className="flex-1 min-h-0 px-3 py-4 overflow-y-auto overflow-x-hidden" aria-label="Main navigation">
         {sections.map((section, sectionIdx) => {
           const isOpen = expanded[section.id];
           return (
@@ -96,7 +99,7 @@ export const Sidebar = () => {
                   )}
                   aria-hidden
                 />
-                <span className="text-[10px] font-semibold tracking-widest uppercase flex-1">
+                <span className="min-w-0 flex-1 truncate text-[10px] font-semibold uppercase tracking-widest">
                   {section.title}
                 </span>
               </button>
@@ -115,7 +118,7 @@ export const Sidebar = () => {
                       <Link
                         href={route.href}
                         className={cn(
-                          "group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200",
+                          "group relative flex min-w-0 items-center gap-2.5 rounded-xl px-2.5 py-2.5 transition-all duration-200",
                           isActive
                             ? "bg-white/10 text-white"
                             : "text-white/50 hover:text-white/80 hover:bg-white/5"
@@ -135,7 +138,7 @@ export const Sidebar = () => {
                           <route.icon className={cn("w-4 h-4", isActive ? "text-white" : "text-white/60")} />
                         </div>
 
-                        <span className="flex-1 text-sm font-medium">{route.label}</span>
+                        <span className="min-w-0 flex-1 truncate text-sm font-medium">{route.label}</span>
 
                         {isActive && (
                           <ChevronRight className="w-3.5 h-3.5 text-white/40 shrink-0" />
@@ -150,20 +153,19 @@ export const Sidebar = () => {
         })}
       </nav>
 
-      {/* Bottom user section */}
-      <div className="px-3 py-4 border-t border-white/[0.06] shrink-0">
-        <div className="flex items-center gap-3 px-3 py-2.5">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white font-semibold text-sm"
-            style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
+      {/* Bottom user section — kept inside sidebar width */}
+      <div className="shrink-0 min-w-0 border-t border-white/[0.06] p-3">
+        <div className="flex min-w-0 items-center gap-2.5 overflow-hidden rounded-xl bg-white/[0.04] px-2.5 py-2">
+          <div
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-semibold text-white"
+            style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
+          >
             {initials}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-white text-[13px] font-semibold truncate">{profile?.name || "Admin User"}</p>
-            <p className="text-white/35 text-[11px] truncate">{roleLabel}</p>
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <p className="truncate text-[13px] font-semibold text-white">{profile?.name || "Admin User"}</p>
+            <p className="truncate text-[11px] text-white/35">{roleLabel}</p>
           </div>
-          <button type="button" className="w-7 h-7 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all shrink-0">
-            <Bell className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
     </div>

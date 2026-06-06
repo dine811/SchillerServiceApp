@@ -29,3 +29,34 @@ export function canCreateSparesForRole(role: string | null | undefined): boolean
   const r = normalizeAppRole(role);
   return r === "ADMIN" || r === "ENGINEER" || r === "VICE_CHANCELLOR";
 }
+
+export function isViceChancellor(role: string | null | undefined): boolean {
+  return normalizeAppRole(role) === "VICE_CHANCELLOR";
+}
+
+/** Legacy VP + admin: all divisions on operational list screens. */
+export function isVpOperationalPrivileged(role: string | null | undefined): boolean {
+  const r = normalizeAppRole(role);
+  return r === "ADMIN" || r === "VICE_CHANCELLOR";
+}
+
+/** Legacy PrfOb_Update.jsp: VP may delete PRF/OB rows. */
+export function canVpDeletePrfOb(role: string | null | undefined): boolean {
+  return isVpOperationalPrivileged(role);
+}
+
+/** Legacy ServiceForm2.jsp: VP may update service records. */
+export function canVpUpdateService(role: string | null | undefined): boolean {
+  return isVpOperationalPrivileged(role);
+}
+
+/** Legacy VP had no employee/division/dealer master screens. */
+export function canVpAccessMasterData(role: string | null | undefined): boolean {
+  return normalizeAppRole(role) === "ADMIN";
+}
+
+/** Legacy ServiceList.jsp: VP views and updates; no create-new entry. */
+export function canVpCreateService(role: string | null | undefined): boolean {
+  const r = normalizeAppRole(role);
+  return r === "ADMIN" || r === "ENGINEER";
+}

@@ -9,6 +9,7 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { apiFetch, getApiBaseUrl } from "@/lib/api";
 import { ServiceService, type PendingActivityRecord } from "@/services/service-service";
 import { DivisionService, type Division } from "@/services/division-service";
+import { isVpOperationalPrivileged } from "@/lib/app-role";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50] as const;
 
@@ -42,7 +43,7 @@ export default function PendingActivityPage() {
   const [exportFrom, setExportFrom] = useState("");
   const [exportTo, setExportTo] = useState("");
 
-  const isAdmin = role === "ADMIN";
+  const allDivisions = isVpOperationalPrivileged(role);
 
   useEffect(() => {
     apiFetch(`${getApiBaseUrl()}/auth/me`)
@@ -76,7 +77,7 @@ export default function PendingActivityPage() {
       setLoading(true);
       setError(null);
       const data = await ServiceService.getPendingActivity(page, pageSize, {
-        division: isAdmin ? divisionFilter || undefined : undefined,
+        division: allDivisions ? divisionFilter || undefined : undefined,
         search: searchDebounced,
       });
       setRows(data.content ?? []);
@@ -88,7 +89,7 @@ export default function PendingActivityPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, isAdmin, divisionFilter, searchDebounced]);
+  }, [page, pageSize, allDivisions, divisionFilter, searchDebounced]);
 
   useEffect(() => {
     loadList();
@@ -104,7 +105,7 @@ export default function PendingActivityPage() {
     setExportLoading(true);
     try {
       const blob = await ServiceService.exportPendingActivityExcel({
-        division: isAdmin ? divisionFilter || undefined : undefined,
+        division: allDivisions ? divisionFilter || undefined : undefined,
         search: searchDebounced || undefined,
         from: exportFrom || undefined,
         to: exportTo || undefined,
@@ -123,7 +124,7 @@ export default function PendingActivityPage() {
   };
 
   const hasFilters =
-    searchInput.trim() !== "" || (isAdmin && divisionFilter !== "") || exportFrom !== "" || exportTo !== "";
+    searchInput.trim() !== "" || (allDivisions && divisionFilter !== "") || exportFrom !== "" || exportTo !== "";
 
   return (
     <div className="space-y-5 max-w-[1900px]">
@@ -175,7 +176,7 @@ export default function PendingActivityPage() {
           </p>
         </div>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {isAdmin ? (
+          {allDivisions ? (
             <div className="space-y-1.5">
               <label htmlFor="pending-act-division" className="block text-sm font-medium text-slate-700">
                 Division
@@ -228,7 +229,7 @@ export default function PendingActivityPage() {
               className="rounded-lg border-slate-200 text-slate-600 hover:bg-white"
               onClick={() => {
                 setSearchInput("");
-                if (isAdmin) setDivisionFilter("");
+                if (allDivisions) setDivisionFilter("");
                 setExportFrom("");
                 setExportTo("");
               }}

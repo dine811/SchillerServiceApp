@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import com.schillerindiaservices.security.SecurityRoleUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -43,10 +44,9 @@ public class ServiceExportController {
             @RequestParam(required = false) String search,
             Authentication authentication
     ) throws IOException {
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equalsIgnoreCase(a.getAuthority()));
+        boolean allDivisions = SecurityRoleUtils.isVpOperationalScope(authentication);
         byte[] excel = serviceExportService.exportPendingFrnToExcel(
-                scRef, search, authentication.getName(), isAdmin);
+                scRef, search, authentication.getName(), allDivisions);
         String filename = "PendingFRN_" + java.time.LocalDate.now() + ".xlsx";
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
@@ -116,9 +116,8 @@ public class ServiceExportController {
             @RequestParam(required = false) String search,
             Authentication authentication
     ) throws IOException {
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equalsIgnoreCase(a.getAuthority()));
-        byte[] excel = serviceExportService.exportToExcelForUser(from, to, search, authentication.getName(), isAdmin);
+        boolean allDivisions = SecurityRoleUtils.isVpOperationalScope(authentication);
+        byte[] excel = serviceExportService.exportToExcelForUser(from, to, search, authentication.getName(), allDivisions);
 
         String filename = "ServiceList_" + LocalDate.now() + ".xlsx";
         return ResponseEntity.ok()

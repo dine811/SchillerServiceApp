@@ -65,7 +65,7 @@ export const Navbar = () => {
 
   if (!mounted) {
     return (
-      <div className="h-16 flex items-center justify-between px-6 border-b border-border/60 bg-white/70 backdrop-blur-md sticky top-0 z-40">
+      <div className="sticky top-0 z-40 flex h-16 min-w-0 items-center justify-between border-b border-border/60 bg-white/70 px-6 backdrop-blur-md">
         <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100/80 border border-slate-200/80 w-64 text-sm text-slate-400">
           <Search className="w-4 h-4 shrink-0" />
           <span>Search anything...</span>
@@ -88,7 +88,7 @@ export const Navbar = () => {
   }
 
   return (
-    <div className="h-16 flex items-center justify-between px-6 border-b border-border/60 bg-white/70 backdrop-blur-md sticky top-0 z-40">
+    <div className="sticky top-0 z-40 flex h-16 min-w-0 items-center justify-between border-b border-border/60 bg-white/70 px-6 backdrop-blur-md">
       {/* Search bar */}
       <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100/80 border border-slate-200/80 w-64 text-sm text-slate-400">
         <Search className="w-4 h-4 shrink-0" />
@@ -120,18 +120,22 @@ export const Navbar = () => {
               </div>
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-52">
-            <DropdownMenuLabel className="text-xs text-slate-500">My Account</DropdownMenuLabel>
+          <DropdownMenuContent
+            align="end"
+            sideOffset={8}
+            className="w-56 rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg"
+          >
+            <DropdownMenuLabel className="px-2 py-1.5 text-xs font-medium text-slate-500">My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer text-sm gap-2">
+            <DropdownMenuItem className="cursor-pointer gap-2 rounded-lg px-2 py-2 text-sm text-slate-700">
               <User className="w-4 h-4" /> Profile
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-sm gap-2">
+            <DropdownMenuItem className="cursor-pointer gap-2 rounded-lg px-2 py-2 text-sm text-slate-700">
               <Settings className="w-4 h-4" /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="cursor-pointer text-sm gap-2 text-red-500 focus:text-red-500 focus:bg-red-50"
+              className="cursor-pointer gap-2 rounded-lg px-2 py-2 text-sm text-red-600 focus:bg-red-50 focus:text-red-600"
               onClick={handleLogout}
             >
               <LogOut className="w-4 h-4" /> Logout

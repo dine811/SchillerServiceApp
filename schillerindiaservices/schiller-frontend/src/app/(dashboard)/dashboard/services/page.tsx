@@ -18,6 +18,7 @@ import {
 import { apiFetch, getApiBaseUrl } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { ServiceService, type ServiceRecord, type DropdownOption, type Model } from "@/services/service-service";
+import { canVpCreateService } from "@/lib/app-role";
 import { Loader2 } from "lucide-react";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -203,6 +204,7 @@ export default function ServicesPage() {
   const [profile, setProfile] = useState<AuthProfile | null>(null);
   const role = normalizeRole(profile?.role);
   const isEngineer = role === "ENGINEER";
+  const showAddRecord = canVpCreateService(role);
   const columns = isEngineer ? ENGINEER_COLUMNS : ADMIN_COLUMNS;
   const thPad = isEngineer ? "px-2.5 py-2" : "px-4 py-3.5";
   const tdPad = isEngineer ? "px-2.5 py-1.5" : "px-4 py-3";
@@ -312,17 +314,19 @@ export default function ServicesPage() {
             {isLoading && <Loader2 className="inline w-3 h-3 animate-spin" />}
           </p>
         </div>
-        <Link
-          href="/dashboard/services/add"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white shadow-md hover:shadow-lg hover:opacity-90 transition-all"
-          style={{
-            background: isEngineer
-              ? "linear-gradient(135deg, #0d9488, #0f766e)"
-              : "linear-gradient(135deg, #6366f1, #8b5cf6)",
-          }}
-        >
-          <Plus className="w-4 h-4" /> Add New Record
-        </Link>
+        {showAddRecord && (
+          <Link
+            href="/dashboard/services/add"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white shadow-md hover:shadow-lg hover:opacity-90 transition-all"
+            style={{
+              background: isEngineer
+                ? "linear-gradient(135deg, #0d9488, #0f766e)"
+                : "linear-gradient(135deg, #6366f1, #8b5cf6)",
+            }}
+          >
+            <Plus className="w-4 h-4" /> Add New Record
+          </Link>
+        )}
       </div>
 
       {/* Filter bar */}

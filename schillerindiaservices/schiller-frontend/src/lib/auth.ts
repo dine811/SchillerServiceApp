@@ -17,7 +17,7 @@ export function defaultDashboardRouteForRole(role: string | null | undefined): s
     case "FQC":
       return "/dashboard/fqc";
     case "VICE_CHANCELLOR":
-      return "/dashboard/reports";
+      return "/dashboard/vp";
     case "SERVICE_COORDINATOR":
       return "/dashboard/service-coordinator";
     case "REPAIR_TEAM":
@@ -36,7 +36,7 @@ export function isAllowedDashboardPath(role: string | null | undefined, pathname
   const r = (role ?? "").toUpperCase();
   if (r === "ADMIN") return pathname.startsWith("/dashboard");
 
-  const allowed: string[] = [...BASE_SHARED];
+  const allowed: string[] = r === "VICE_CHANCELLOR" ? [] : [...BASE_SHARED];
   if (r === "ENGINEER") {
     allowed.push(
       "/dashboard/engineer",
@@ -82,7 +82,26 @@ export function isAllowedDashboardPath(role: string | null | undefined, pathname
     allowed.push("/dashboard/services", "/dashboard/call-list", "/dashboard/prf-ob-admin", "/dashboard/non-salable-admin", "/dashboard/bir-admin");
     if (r === "REPAIR_TEAM") allowed.push("/dashboard/under-repair");
   } else if (r === "VICE_CHANCELLOR") {
-    allowed.push("/dashboard/reports", "/dashboard/prf-ob-closed", "/dashboard/bir-closed-admin", "/dashboard/salables", "/dashboard/closed-calls");
+    allowed.push(
+      "/dashboard/vp",
+      "/dashboard/services",
+      "/dashboard/under-repair",
+      "/dashboard/pending-frn",
+      "/dashboard/ob-pending",
+      "/dashboard/sc-closed",
+      "/dashboard/new-closed",
+      "/dashboard/scrap-list",
+      "/dashboard/call-list",
+      "/dashboard/closed-calls",
+      "/dashboard/pending-activity",
+      "/dashboard/closed-activity",
+      "/dashboard/prf-ob-admin",
+      "/dashboard/prf-ob-closed",
+      "/dashboard/non-salable-admin",
+      "/dashboard/salables",
+      "/dashboard/bir-admin",
+      "/dashboard/bir-closed-admin"
+    );
   }
 
   if (ADMIN_ONLY_PREFIXES.some((p) => pathname.startsWith(p))) return false;
