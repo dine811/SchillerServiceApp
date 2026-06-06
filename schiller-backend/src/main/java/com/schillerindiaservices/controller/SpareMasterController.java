@@ -2,6 +2,7 @@ package com.schillerindiaservices.controller;
 
 import com.schillerindiaservices.dto.SpareMasterDTO;
 import com.schillerindiaservices.dto.SpareMasterRequest;
+import com.schillerindiaservices.security.SecurityRoleUtils;
 import com.schillerindiaservices.service.SpareMasterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,10 +30,7 @@ public class SpareMasterController {
             @RequestParam(defaultValue = "id,desc") String sort,
             Authentication authentication
     ) {
-        boolean isPrivileged = authentication.getAuthorities().stream().anyMatch(a -> {
-            String auth = a.getAuthority();
-            return "ROLE_ADMIN".equalsIgnoreCase(auth) || "ROLE_VICE_CHANCELLOR".equalsIgnoreCase(auth);
-        });
+        boolean isPrivileged = SecurityRoleUtils.isSparesAllDivisionsScope(authentication);
         return ResponseEntity.ok(
                 spareMasterService.findPendingForUser(
                         authentication.getName(),
@@ -53,10 +51,7 @@ public class SpareMasterController {
             @RequestParam(defaultValue = "id,desc") String sort,
             Authentication authentication
     ) {
-        boolean isPrivileged = authentication.getAuthorities().stream().anyMatch(a -> {
-            String auth = a.getAuthority();
-            return "ROLE_ADMIN".equalsIgnoreCase(auth) || "ROLE_VICE_CHANCELLOR".equalsIgnoreCase(auth);
-        });
+        boolean isPrivileged = SecurityRoleUtils.isSparesAllDivisionsScope(authentication);
         return ResponseEntity.ok(
                 spareMasterService.findCompletedForUser(
                         authentication.getName(),

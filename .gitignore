@@ -22,3 +22,6 @@ out/
 # Environment files
 .env
 .env.*
+
+# Temporary legacy data exports (local DB import only)
+schiller-backend/scripts/csv_export_2026/

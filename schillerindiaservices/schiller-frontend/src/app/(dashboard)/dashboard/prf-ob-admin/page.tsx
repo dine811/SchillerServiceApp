@@ -53,7 +53,10 @@ export default function PrfObAdminListPage() {
   const [canDelete, setCanDelete] = useState(true);
 
   useEffect(() => {
-    setCanDelete(showPrfobDelete());
+    fetch("/api/auth/me", { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((me: { role?: string } | null) => setCanDelete(showPrfobDelete(me?.role)))
+      .catch(() => setCanDelete(showPrfobDelete()));
   }, []);
 
   useEffect(() => {

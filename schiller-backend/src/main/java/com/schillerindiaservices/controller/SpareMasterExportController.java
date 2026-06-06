@@ -1,5 +1,6 @@
 package com.schillerindiaservices.controller;
 
+import com.schillerindiaservices.security.SecurityRoleUtils;
 import com.schillerindiaservices.service.SpareMasterExportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -27,10 +28,7 @@ public class SpareMasterExportController {
             @RequestParam(required = false) String to,
             Authentication authentication
     ) throws IOException {
-        boolean isPrivileged = authentication.getAuthorities().stream().anyMatch(a -> {
-            String auth = a.getAuthority();
-            return "ROLE_ADMIN".equalsIgnoreCase(auth) || "ROLE_VICE_CHANCELLOR".equalsIgnoreCase(auth);
-        });
+        boolean isPrivileged = SecurityRoleUtils.isSparesAllDivisionsScope(authentication);
         byte[] excel = spareMasterExportService.exportPendingToExcel(
                 authentication.getName(),
                 isPrivileged,
@@ -54,10 +52,7 @@ public class SpareMasterExportController {
             @RequestParam(required = false) String to,
             Authentication authentication
     ) throws IOException {
-        boolean isPrivileged = authentication.getAuthorities().stream().anyMatch(a -> {
-            String auth = a.getAuthority();
-            return "ROLE_ADMIN".equalsIgnoreCase(auth) || "ROLE_VICE_CHANCELLOR".equalsIgnoreCase(auth);
-        });
+        boolean isPrivileged = SecurityRoleUtils.isSparesAllDivisionsScope(authentication);
         byte[] excel = spareMasterExportService.exportCompletedToExcel(
                 authentication.getName(),
                 isPrivileged,
