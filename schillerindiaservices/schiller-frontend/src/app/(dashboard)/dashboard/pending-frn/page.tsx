@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Download, Loader2, Puzzle, Search, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { RepairInitiateButton } from "@/components/repair/repair-initiate-button";
 import { apiFetch, getApiBaseUrl } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import {
@@ -63,27 +64,6 @@ function nil(val: unknown): string {
 interface Emp {
   empId: number;
   empName: string;
-}
-
-function repairColumnContent(id: number | undefined, repairStatus: string | null | undefined) {
-  const rs = (repairStatus ?? "").trim().toUpperCase();
-  if (rs === "RP") {
-    return <span className="text-slate-500 text-xs font-medium">RP</span>;
-  }
-  if (rs === "RC") {
-    return <span className="text-slate-500 text-xs font-medium">RC</span>;
-  }
-  if (id == null) {
-    return <span className="text-slate-400">—</span>;
-  }
-  return (
-    <Link
-      href={`/dashboard/services/${id}/update`}
-      className="text-violet-600 font-semibold text-xs hover:underline whitespace-nowrap"
-    >
-      SR
-    </Link>
-  );
 }
 
 export default function PendingFrnPage() {
@@ -469,7 +449,7 @@ export default function PendingFrnPage() {
                       )}
                     </td>
                     <td className="px-2 py-1.5 text-right whitespace-nowrap">
-                      {repairColumnContent(row.id, row.repairStatus)}
+                      <RepairInitiateButton serviceId={row.id} category="PFRN" repairStatus={row.repairStatus} />
                     </td>
                   </tr>
                 ))

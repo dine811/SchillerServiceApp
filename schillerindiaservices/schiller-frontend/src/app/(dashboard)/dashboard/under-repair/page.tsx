@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Download, Loader2, Search, Timer, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { RepairInitiateButton } from "@/components/repair/repair-initiate-button";
 import { apiFetch, getApiBaseUrl } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import {
@@ -312,6 +313,7 @@ export default function UnderRepairPage() {
                     "Final Remarks",
                     "Type of work",
                     "PDays",
+                    "Repair",
                   ] as const
                 ).map((label) => (
                   <th
@@ -329,14 +331,14 @@ export default function UnderRepairPage() {
             <tbody>
               {loading && rows.length === 0 ? (
                 <tr>
-                  <td colSpan={15} className="text-center py-16 text-slate-400">
+                  <td colSpan={16} className="text-center py-16 text-slate-400">
                     <Loader2 className="w-6 h-6 animate-spin inline mr-2 align-middle" />
                     Loading…
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
                 <tr>
-                  <td colSpan={15} className="text-center py-14 text-slate-400 text-sm">
+                  <td colSpan={16} className="text-center py-14 text-slate-400 text-sm">
                     No records in this queue.
                   </td>
                 </tr>
@@ -431,6 +433,9 @@ export default function UnderRepairPage() {
                       >
                         {row.pendingDays ?? "—"}
                       </span>
+                    </td>
+                    <td className="px-2 py-1.5 whitespace-nowrap">
+                      <RepairInitiateButton serviceId={row.id} category="UR" repairStatus={row.repairStatus} />
                     </td>
                   </tr>
                 ))

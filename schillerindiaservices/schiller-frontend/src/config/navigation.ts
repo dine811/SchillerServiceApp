@@ -158,6 +158,34 @@ export const dashboardNavSections: NavSection[] = [
         description: "Completed call register",
       },
       {
+        label: "PFRN Repairs",
+        href: "/dashboard/repair",
+        icon: Wrench,
+        gradient: "from-violet-500 to-indigo-600",
+        description: "Pending PFRN repairs",
+      },
+      {
+        label: "OB Repairs",
+        href: "/dashboard/repair-ob",
+        icon: Wrench,
+        gradient: "from-amber-500 to-orange-600",
+        description: "Pending OB repairs",
+      },
+      {
+        label: "UR Repairs",
+        href: "/dashboard/repair-ur",
+        icon: Wrench,
+        gradient: "from-sky-500 to-cyan-600",
+        description: "Pending UR repairs",
+      },
+      {
+        label: "Closed Repairs",
+        href: "/dashboard/repair-closed",
+        icon: ClipboardCheck,
+        gradient: "from-emerald-500 to-teal-600",
+        description: "Completed repairs",
+      },
+      {
         label: "Pending activity",
         href: "/dashboard/pending-activity",
         icon: ClipboardList,
@@ -366,11 +394,28 @@ export const fqcNavSections: NavSection[] = [
   },
 ];
 
+/** Legacy Repair Team dashboard: four repair queues plus call registers. */
+export const repairTeamNavSections: NavSection[] = [
+  {
+    id: "activity",
+    title: "Repair team",
+    items: [
+      { label: "PFRN Repairs", href: "/dashboard/repair", icon: Wrench, gradient: "from-violet-500 to-indigo-600" },
+      { label: "OB Repairs", href: "/dashboard/repair-ob", icon: Wrench, gradient: "from-amber-500 to-orange-600" },
+      { label: "UR Repairs", href: "/dashboard/repair-ur", icon: Wrench, gradient: "from-sky-500 to-cyan-600" },
+      { label: "Closed Repairs", href: "/dashboard/repair-closed", icon: ClipboardCheck, gradient: "from-emerald-500 to-teal-600" },
+      { label: "Call Register", href: "/dashboard/call-list", icon: Phone, gradient: "from-blue-500 to-indigo-600" },
+      { label: "Closed Calls", href: "/dashboard/closed-calls", icon: CheckCircle2, gradient: "from-emerald-500 to-teal-600" },
+    ],
+  },
+];
+
 export function navSectionsForRole(role: string | null | undefined): NavSection[] {
   const normalized = (role ?? "").toUpperCase();
   if (normalized === "ENGINEER") return engineerNavSections;
   if (normalized === "FQC") return fqcNavSections;
   if (normalized === "SERVICE_COORDINATOR") return serviceCoordinatorNavSections;
+  if (normalized === "REPAIR_TEAM") return repairTeamNavSections;
   if (normalized && normalized !== "ADMIN") return allowedNavSectionsForRole(normalized, dashboardNavSections);
   return dashboardNavSections;
 }

@@ -21,7 +21,7 @@ export function defaultDashboardRouteForRole(role: string | null | undefined): s
     case "SERVICE_COORDINATOR":
       return "/dashboard/service-coordinator";
     case "REPAIR_TEAM":
-      return "/dashboard/under-repair";
+      return "/dashboard/repair";
     case "PRODUCT_SUPPORT":
       return "/dashboard/prf-ob-admin";
     default:
@@ -80,13 +80,26 @@ export function isAllowedDashboardPath(role: string | null | undefined, pathname
     );
   } else if (r === "PRODUCT_SUPPORT" || r === "REPAIR_TEAM") {
     allowed.push("/dashboard/services", "/dashboard/call-list", "/dashboard/prf-ob-admin", "/dashboard/non-salable-admin", "/dashboard/bir-admin");
-    if (r === "REPAIR_TEAM") allowed.push("/dashboard/under-repair");
+    if (r === "REPAIR_TEAM") {
+      allowed.push(
+        "/dashboard/repair",
+        "/dashboard/repair-ob",
+        "/dashboard/repair-ur",
+        "/dashboard/repair-closed",
+        "/dashboard/closed-calls"
+      );
+    }
   } else if (r === "VICE_CHANCELLOR") {
     allowed.push("/dashboard/reports", "/dashboard/prf-ob-closed", "/dashboard/bir-closed-admin", "/dashboard/salables", "/dashboard/closed-calls");
   }
 
   if (ADMIN_ONLY_PREFIXES.some((p) => pathname.startsWith(p))) return false;
-  return allowed.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  return allowed.some((p) => {
+    // The dashboard landing page is shared, but must not implicitly grant every
+    // nested dashboard route through a broad prefix match.
+    if (p === "/dashboard") return pathname === p || pathname === `${p}/`;
+    return pathname === p || pathname.startsWith(`${p}/`);
+  });
 }
 
 export function decodeRoleFromJwt(token: string | undefined): string | null {

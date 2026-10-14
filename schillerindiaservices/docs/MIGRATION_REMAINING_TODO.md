@@ -22,7 +22,7 @@
 | P0 | Role and navigation parity | Users can see links that may be blocked by auth, or may miss legacy links entirely. |
 | P0 | Auth and API security hardening | Migration cannot safely replace legacy until APIs and data scopes are enforced. |
 | P1 | Coordinator spares | Legacy service coordinator flow is not fully represented in current role access. |
-| P1 | Repair team module | Legacy repair dashboard has dedicated repair queues not fully migrated. |
+| P1 | Repair team module | **Completed on `codex/migrate-repair-team`** with dedicated queues, update flow, export, authorization, and service synchronization. |
 | P1 | VP / Product Support parity | These roles have partial access in the new stack compared with legacy dashboards. |
 | P2 | Admin configuration modules | Company, dropdown values, email settings, auto-escalation mail remain legacy-only or unclear. |
 | P2 | Edit/update parity for BIR and non-salable | Current migrated admin modules cover list/export/delete/create but not all legacy edit flows. |
@@ -71,11 +71,11 @@
 
 | ID | Status | Suggested owner | Legacy source | Target | Acceptance criteria |
 |----|--------|-----------------|---------------|--------|---------------------|
-| REP-001 | TODO | Repair agent | `repairDashboard.jsp` | Repair module design | Decide whether repair flows are dedicated routes or merged into service queues. Decision recorded. |
-| REP-002 | TODO | Repair agent | `repairList*.jsp` | `/dashboard/repair`, `/dashboard/repair-closed`, or approved target routes | Repair team can access pending repair queues equivalent to legacy PFRN/OB/UR flows. |
-| REP-003 | TODO | Repair agent | `repairList_Closed.jsp` | Closed repair page or merged closed queue | Closed repair list is available with filters and role scope. |
-| REP-004 | TODO | Backend agent | Repair list DAO/servlet logic | Repair APIs or service queue filters | Backend returns the same business statuses as legacy repair queues. |
-| REP-005 | TODO | QA agent | Repair dashboard | Regression checklist | Repair role smoke test covers route access, list filters, status transitions, and closed repair visibility. |
+| REP-001 | DONE | Repair agent | `repairDashboard.jsp` | [Repair module design](./migration/repair-team/DESIGN.md) | Dedicated route/API decision and parity matrix recorded. |
+| REP-002 | DONE | Repair agent | `repairList*.jsp` | `/dashboard/repair`, `/dashboard/repair-ob`, `/dashboard/repair-ur` | PFRN, OB, and UR pending queues include filters, paging, sorting, update, and export. |
+| REP-003 | DONE | Repair agent | `repairList_Closed.jsp` | `/dashboard/repair-closed` | Completed repairs are available read-only with stored days, filters, paging, and export. |
+| REP-004 | DONE | Backend agent | Repair DAO/servlet logic | `/api/repairs/**` | Transactional repair APIs preserve legacy statuses and synchronize `service_master`. |
+| REP-005 | DONE | QA agent | Repair dashboard | Automated tests and live regression | Role access, queue filters, transitions, duplicate protection, completion, export, and service synchronization pass. |
 
 ---
 
@@ -157,4 +157,3 @@
 3. Run `AUTH-001` to confirm the real current auth state vs the older implementation plan.
 4. Assign `SC-003` and `REP-002` to separate agents because those are the largest remaining role-specific page gaps.
 5. Assign `VP-001` and `PS-001` as read-only discovery tasks before building new pages.
-
