@@ -1,6 +1,7 @@
 package com.schillerindiaservices.config;
 
 import com.schillerindiaservices.security.JwtAuthenticationFilter;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .dispatcherTypeMatchers(DispatcherType.ERROR)
+                        .permitAll()
                         .requestMatchers("/api/auth/**", "/api/health", "/api-docs/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
                         .permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
@@ -37,6 +40,12 @@ public class SecurityConfig {
                         .authenticated()
                         .requestMatchers("/api/employees/**")
                         .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/repairs", "/api/repairs/**")
+                        .hasAnyRole("ADMIN", "REPAIR_TEAM")
+                        .requestMatchers(HttpMethod.POST, "/api/repairs/from-service/**")
+                        .hasAnyRole("ADMIN", "ENGINEER")
+                        .requestMatchers(HttpMethod.PUT, "/api/repairs/**")
+                        .hasAnyRole("ADMIN", "REPAIR_TEAM")
                         .anyRequest()
                         .authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
