@@ -216,6 +216,7 @@ export default function NonSalableAdminPage() {
               maxDate={exportFromMax}
               label="From"
               variant="compact"
+              modernCaption
             />
           </div>
           <div className="min-w-[136px]">
@@ -227,6 +228,7 @@ export default function NonSalableAdminPage() {
               maxDate={todayStart}
               label="To"
               variant="compact"
+              modernCaption
             />
           </div>
           <div className="min-w-[170px]">

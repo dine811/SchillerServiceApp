@@ -3,10 +3,99 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { format } from "date-fns";
-import { CalendarDays, X } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import { CalendarDays, ChevronDown, X } from "lucide-react";
+import { DayPicker, useDayPicker, type DropdownProps } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { cn } from "@/lib/utils";
+
+function isYearOptionList(options: DropdownProps["options"]) {
+  return /^\d{4}$/.test(String(options?.[0]?.label ?? ""));
+}
+
+/** Month grid and year grid used only when a DatePicker opts into `modernCaption`. */
+function ModernCaptionDropdown({ options, value, disabled, "aria-label": ariaLabel }: DropdownProps) {
+  const { months, goToMonth } = useDayPicker();
+  const [open, setOpen] = React.useState(false);
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const selectedRef = React.useRef<HTMLButtonElement>(null);
+  const yearList = isYearOptionList(options);
+  const selected = options?.find((option) => String(option.value) === String(value));
+
+  React.useEffect(() => {
+    if (!open) return;
+    selectedRef.current?.scrollIntoView({ block: "nearest" });
+    function handle(e: MouseEvent) {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handle);
+    return () => document.removeEventListener("mousedown", handle);
+  }, [open]);
+
+  const choose = (next: number) => {
+    const displayed = months[0]?.date ?? new Date();
+    const year = yearList ? next : displayed.getFullYear();
+    const month = yearList ? displayed.getMonth() : next;
+    goToMonth(new Date(year, month, 1));
+    setOpen(false);
+  };
+
+  return (
+    <div ref={rootRef} className="relative min-w-0 flex-1">
+      <button
+        type="button"
+        disabled={disabled}
+        aria-label={ariaLabel}
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className={cn(
+          "flex w-full items-center justify-between gap-1 rounded-xl border bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-800 shadow-sm transition",
+          open ? "border-violet-400 ring-2 ring-violet-500/20" : "border-slate-200 hover:border-violet-300",
+          disabled && "cursor-not-allowed opacity-50"
+        )}
+      >
+        <span className="truncate">{selected?.label}</span>
+        <ChevronDown className={cn("h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform", open && "rotate-180")} />
+      </button>
+      {open && (
+        <div
+          className={cn(
+            "absolute top-full z-30 mt-1.5 rounded-2xl border border-slate-200/80 bg-white p-2 shadow-[0_16px_40px_-12px_rgba(15,23,42,0.28)] ring-1 ring-black/[0.04]",
+            yearList ? "right-0 w-[calc(200%+0.5rem)]" : "left-0 w-[calc(200%+0.5rem)]"
+          )}
+        >
+          <div
+            className={cn(
+              "grid grid-cols-3 gap-1",
+              yearList && "max-h-40 overflow-y-auto overscroll-contain pr-0.5 [scrollbar-width:thin]"
+            )}
+          >
+            {options?.map((option) => {
+              const active = String(option.value) === String(value);
+              return (
+                <button
+                  key={option.value}
+                  ref={active ? selectedRef : undefined}
+                  type="button"
+                  disabled={option.disabled}
+                  onClick={() => choose(option.value)}
+                  className={cn(
+                    "rounded-lg px-1 py-1.5 text-[11px] font-medium transition",
+                    active
+                      ? "bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-sm shadow-violet-500/30"
+                      : "text-slate-700 hover:bg-violet-50 hover:text-violet-800",
+                    option.disabled && "cursor-not-allowed text-slate-300 line-through hover:bg-transparent"
+                  )}
+                >
+                  {yearList ? option.label : option.label.slice(0, 3)}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface DatePickerProps {
   value?: string; // yyyy-MM-dd
@@ -21,6 +110,8 @@ interface DatePickerProps {
   variant?: "default" | "compact";
   /** Popover opens toward end (right) — useful for last columns in wide tables */
   alignPopover?: "start" | "end";
+  /** Month and year lists render as grids instead of the browser’s native menus. */
+  modernCaption?: boolean;
 }
 
 export function DatePicker({
@@ -34,6 +125,7 @@ export function DatePicker({
   maxDate,
   variant = "default",
   alignPopover = "start",
+  modernCaption = false,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
@@ -186,7 +278,15 @@ export function DatePicker({
                       : undefined
                   }
                   showOutsideDays
-                  className={compact ? "p-2.5" : "p-3"}
+                  components={modernCaption ? { Dropdown: ModernCaptionDropdown } : undefined}
+                  className={cn(
+                    compact ? "p-2.5" : "p-3",
+                    compact
+                      ? "[--rdp-day-height:2rem] [--rdp-day-width:2rem] [--rdp-day_button-height:2rem] [--rdp-day_button-width:2rem]"
+                      : "[--rdp-day-height:2.25rem] [--rdp-day-width:2.25rem] [--rdp-day_button-height:2.25rem] [--rdp-day_button-width:2.25rem]",
+                    "[--rdp-day_button-border:2px_solid_transparent] [--rdp-selected-border:2px_solid_transparent]",
+                    "[&_.rdp-selected]:text-[length:inherit] [&_.rdp-selected]:font-medium"
+                  )}
                   classNames={{
                     months: "flex flex-col sm:flex-row gap-4",
                     month: "space-y-2 w-full",
@@ -200,22 +300,23 @@ export function DatePicker({
                     vhidden: "hidden",
                     nav: "hidden",
                     month_grid: "w-full border-collapse",
-                    weekdays: "flex",
+                    weekdays: "flex w-full",
                     weekday: cn(
-                      "text-slate-400 font-semibold text-center uppercase tracking-wide",
-                      compact ? "w-8 text-[0.65rem] pb-1" : "w-9 text-[0.8rem]"
+                      "flex-1 text-slate-400 font-semibold text-center uppercase tracking-wide",
+                      compact ? "text-[0.65rem] pb-1" : "text-[0.8rem]"
                     ),
                     week: "flex w-full mt-0.5",
-                    day: cn(
-                      "p-0 font-medium rounded-full transition-all duration-150",
-                      "text-slate-700 aria-selected:opacity-100",
-                      "hover:bg-violet-100 hover:text-violet-900",
+                    day: "relative flex flex-1 items-center justify-center p-0",
+                    day_button: cn(
+                      "inline-flex items-center justify-center rounded-full p-0 font-medium leading-none transition-colors",
+                      "text-slate-700 hover:bg-violet-100 hover:text-violet-900",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40",
-                      compact ? "h-8 w-8 text-xs" : "h-9 w-9 text-sm"
+                      compact ? "size-8 text-xs" : "size-9 text-sm"
                     ),
                     selected:
-                      "bg-gradient-to-br from-violet-600 to-indigo-600 text-white hover:from-violet-600 hover:to-indigo-600 hover:text-white font-semibold shadow-md shadow-violet-500/25",
-                    today: "ring-2 ring-violet-400/40 ring-offset-1 font-semibold text-violet-900 bg-violet-50/80",
+                      "[&>button]:bg-gradient-to-br [&>button]:from-violet-600 [&>button]:to-indigo-600 [&>button]:text-white [&>button]:hover:from-violet-600 [&>button]:hover:to-indigo-600 [&>button]:hover:text-white [&>button]:font-semibold [&>button]:shadow-md [&>button]:shadow-violet-500/25",
+                    today:
+                      "[&>button]:ring-2 [&>button]:ring-inset [&>button]:ring-violet-400/70 [&>button]:font-semibold [&>button]:text-violet-900",
                     outside: "text-slate-300 opacity-60",
                     disabled: "text-slate-300 opacity-40 line-through",
                   }}

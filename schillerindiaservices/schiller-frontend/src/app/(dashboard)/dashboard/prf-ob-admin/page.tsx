@@ -296,6 +296,7 @@ export default function PrfObAdminListPage() {
             placeholder="Start date"
             minDate={tenYearsAgo}
             maxDate={exportFromMax}
+            modernCaption
           />
           <DatePicker
             label="Export — to (entry date)"
@@ -305,6 +306,7 @@ export default function PrfObAdminListPage() {
             minDate={exportToMin}
             maxDate={todayStart}
             alignPopover="end"
+            modernCaption
           />
         </div>
         {hasFilters && (

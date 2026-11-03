@@ -218,8 +218,8 @@ export default function ClosedActivityPage() {
               />
             </div>
           </div>
-          <DatePicker label="Export — from (entry date)" value={exportFrom} onChange={setExportFrom} placeholder="Start date" />
-          <DatePicker label="Export — to (entry date)" value={exportTo} onChange={setExportTo} placeholder="End date" alignPopover="end" />
+          <DatePicker modernCaption label="Export — from (entry date)" value={exportFrom} onChange={setExportFrom} placeholder="Start date" />
+          <DatePicker modernCaption label="Export — to (entry date)" value={exportTo} onChange={setExportTo} placeholder="End date" alignPopover="end" />
         </div>
         {hasFilters && (
           <div className="px-4 pb-4">

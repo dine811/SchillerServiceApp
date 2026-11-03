@@ -73,7 +73,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Nav — collapsible sections (legacy nested menus) */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto" aria-label="Main navigation">
+      <nav className="sidebar-nav flex-1 px-3 py-4 overflow-y-auto" aria-label="Main navigation">
         {sections.map((section, sectionIdx) => {
           const isOpen = expanded[section.id];
           return (

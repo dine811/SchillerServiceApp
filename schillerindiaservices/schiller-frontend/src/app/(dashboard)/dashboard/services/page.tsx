@@ -336,8 +336,8 @@ export default function ServicesPage() {
           </div>
           <div className="flex flex-wrap items-end gap-3 sm:justify-end sm:ml-auto">
             <div className="flex items-end gap-2">
-              <DatePicker value={fromDate} onChange={v => { setFromDate(v); setPage(0); }} placeholder="From date" label="From Date" />
-              <DatePicker value={toDate} onChange={v => { setToDate(v); setPage(0); }} placeholder="To date" label="To Date" />
+              <DatePicker modernCaption value={fromDate} onChange={v => { setFromDate(v); setPage(0); }} placeholder="From date" label="From Date" />
+              <DatePicker modernCaption value={toDate} onChange={v => { setToDate(v); setPage(0); }} placeholder="To date" label="To Date" />
             </div>
             <button
               type="button"

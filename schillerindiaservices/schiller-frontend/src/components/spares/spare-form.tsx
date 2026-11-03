@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { DatePicker } from "@/components/ui/date-picker";
 import { ServiceService, type SpareMasterPayload, type SpareMasterRecord } from "@/services/service-service";
 
 type Mode = "create" | "edit";
@@ -114,11 +115,10 @@ export default function SpareForm({
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="grid grid-cols-1 gap-4 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-2">
           <Field label="Entry Date">
-            <input
-              type="date"
+            <DatePicker
               value={toInputDate(form.entryDate)}
-              onChange={(e) => set("entryDate", e.target.value)}
-              className={inputCls}
+              onChange={(v) => set("entryDate", v)}
+              modernCaption
             />
           </Field>
           <Field label="Division">
@@ -176,12 +176,11 @@ export default function SpareForm({
             </select>
           </Field>
           <Field label="Returned Date">
-            <input
-              type="date"
+            <DatePicker
               value={toInputDate(form.returnedDate)}
-              onChange={(e) => set("returnedDate", e.target.value)}
-              className={inputCls}
+              onChange={(v) => set("returnedDate", v)}
               disabled={!isCompleted}
+              modernCaption
             />
           </Field>
           <div className="md:col-span-2">

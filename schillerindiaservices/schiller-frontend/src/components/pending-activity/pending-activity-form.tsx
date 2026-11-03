@@ -235,7 +235,7 @@ function DateField({
 }) {
   return (
     <div className="space-y-1.5">
-      <DatePicker
+      <DatePicker modernCaption
         label={label}
         value={value}
         onChange={onChange}

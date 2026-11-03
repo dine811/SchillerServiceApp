@@ -573,16 +573,16 @@ export default function EditServicePage() {
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 space-y-3">
                 <h3 className="text-xs font-bold text-blue-600 uppercase mb-2">Section 2: Repair Progress</h3>
                 <Combobox label="Type of Work" required options={toDdOpts(dd5Options)} value={f.typeOfWork} onChange={v => set("typeOfWork", v)} />
-                <DatePicker label="Repaired Brd Stk Date" required={isRepairStkDateRequired} disabled={isRepairStkDateReadOnly} value={f.repairedBrdStkDate} onChange={v => set("repairedBrdStkDate", v)} minDate={tenYearsAgo} maxDate={today} />
+                <DatePicker modernCaption label="Repaired Brd Stk Date" required={isRepairStkDateRequired} disabled={isRepairStkDateReadOnly} value={f.repairedBrdStkDate} onChange={v => set("repairedBrdStkDate", v)} minDate={tenYearsAgo} maxDate={today} />
                 <Txt label="Repaired Brd Adv No" value={f.repairedBrdAdvNo} onChange={v => set("repairedBrdAdvNo", v)} disabled={isRepairedBrdAdvNoReadOnly} required={isRepairedBrdAdvNoRequired} />
                 <TxtA label="Technical Remarks" value={f.technicalRemarks} onChange={v => set("technicalRemarks", v)} />
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 space-y-3">
                 <h3 className="text-xs font-bold text-emerald-600 uppercase mb-2">Section 3: Shipping & Report</h3>
-                <DatePicker label="Ship Date from SC" required={isShipDateSCRequired} disabled={isShipDateSCReadOnly} value={f.shipDtFrmSerCntr} onChange={v => set("shipDtFrmSerCntr", v)} minDate={tenYearsAgo} maxDate={today} />
+                <DatePicker modernCaption label="Ship Date from SC" required={isShipDateSCRequired} disabled={isShipDateSCReadOnly} value={f.shipDtFrmSerCntr} onChange={v => set("shipDtFrmSerCntr", v)} minDate={tenYearsAgo} maxDate={today} />
                 <Txt label="Advice No" value={f.dispAdvNo} onChange={v => set("dispAdvNo", v)} disabled={!f.shipDtFrmSerCntr} />
-                <DatePicker label="Ship Date from Commercial" required={isShipDateCommRequired} disabled={isShipDateCommReadOnly} value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} minDate={tenYearsAgo} maxDate={today} />
+                <DatePicker modernCaption label="Ship Date from Commercial" required={isShipDateCommRequired} disabled={isShipDateCommReadOnly} value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} minDate={tenYearsAgo} maxDate={today} />
                 <Txt label="DC No" value={f.dcNo} onChange={v => set("dcNo", v)} required={isDcNoRequired} disabled={isDcNoReadOnly} />
               </div>
 
@@ -612,9 +612,9 @@ export default function EditServicePage() {
                   ? <Combobox label="SC Engineer" required options={engineerOpts} value={f.scEngineer} onChange={v => set("scEngineer", v)} placeholder="Select SC engineer..." disabled={lockNonOperationalFields} />
                   : <Txt label="SC Engineer" value={f.scEngineer} onChange={() => {}} disabled />}
                 <Txt label="FRN No" value={f.frnNo} onChange={v => set("frnNo", v)} required placeholder="e.g. FRN-8830" readOnly={lockNonOperationalFields} />
-                <DatePicker label="FRN Date" required value={f.frnDate} onChange={v => set("frnDate", v)} minDate={tenYearsAgo} maxDate={today} disabled={lockNonOperationalFields} />
-                <DatePicker label="Ser Comm Inward Date" required value={f.serCommInwardDate} onChange={v => set("serCommInwardDate", v)} minDate={tenYearsAgo} maxDate={today} disabled={lockNonOperationalFields} />
-                <DatePicker label="Received Date Ser Centre" required value={f.serCentreReceivedDate} onChange={v => set("serCentreReceivedDate", v)} minDate={yesterday} maxDate={today} disabled={lockNonOperationalFields} />
+                <DatePicker modernCaption label="FRN Date" required value={f.frnDate} onChange={v => set("frnDate", v)} minDate={tenYearsAgo} maxDate={today} disabled={lockNonOperationalFields} />
+                <DatePicker modernCaption label="Ser Comm Inward Date" required value={f.serCommInwardDate} onChange={v => set("serCommInwardDate", v)} minDate={tenYearsAgo} maxDate={today} disabled={lockNonOperationalFields} />
+                <DatePicker modernCaption label="Received Date Ser Centre" required value={f.serCentreReceivedDate} onChange={v => set("serCentreReceivedDate", v)} minDate={yesterday} maxDate={today} disabled={lockNonOperationalFields} />
                 <Combobox label="STK/CUST" required options={toDdOpts(dd1Options)} value={f.stkCust} onChange={v => set("stkCust", v)} placeholder="Select..." disabled={lockNonOperationalFields} />
                 <Combobox label="Region" required options={regions.map(r => ({ value: String(r.regionId), label: r.regionName }))} value={f.region} onChange={handleRegion} placeholder="Select region..." disabled={lockNonOperationalFields} />
                 <Combobox label="Branch" required options={branches.map(b => ({ value: String(b.id), label: b.branchName }))} value={f.branch} onChange={v => set("branch", v)} disabled={lockNonOperationalFields || !f.region} placeholder="Select branch..." />
@@ -630,7 +630,7 @@ export default function EditServicePage() {
                 <Txt label="Model Configuration" value={f.modelConfig} onChange={v => set("modelConfig", v)} placeholder="Standard / ICU Grade" readOnly={lockNonOperationalFields} />
                 <Txt label="Unit SL No" value={f.unitSlno} onChange={v => set("unitSlno", v)} required placeholder="e.g. SN-4421" readOnly={lockNonOperationalFields} />
                 <Combobox label="Unit Status" required options={toDdOpts(dd2Options)} value={f.unitStatus} onChange={v => set("unitStatus", v)} placeholder="Select status..." disabled={lockNonOperationalFields} />
-                <DatePicker label="DOD" required={isDodRequired} value={f.dod} onChange={v => set("dod", v)} minDate={tenYearsAgo} maxDate={today} disabled={lockNonOperationalFields} />
+                <DatePicker modernCaption label="DOD" required={isDodRequired} value={f.dod} onChange={v => set("dod", v)} minDate={tenYearsAgo} maxDate={today} disabled={lockNonOperationalFields} />
                 <Txt label="MOD/BRD Name" value={f.modBrdName} onChange={v => set("modBrdName", v)} required placeholder="e.g. PCB V1" readOnly={lockNonOperationalFields} />
                 <Txt label="Part Number" value={f.partNumber} onChange={v => set("partNumber", v)} onBlur={handlePartNumberBlur} placeholder="e.g. PN-100" readOnly={lockNonOperationalFields} />
                 <Txt label="Compatible Models" value={f.compatibleModels} onChange={v => { set("compatibleModels", v); set("defModBrdName", ""); }} placeholder="e.g. X1, X2" readOnly={lockNonOperationalFields} />
@@ -650,13 +650,13 @@ export default function EditServicePage() {
                 <TxtA label="Field Remarks" value={f.fieldRemarks} onChange={v => set("fieldRemarks", v)} required={false} />
                 <TxtA label="Technical Remarks" value={f.technicalRemarks} onChange={v => set("technicalRemarks", v)} />
                 <TxtA label="Components Used" value={f.componentsUsedForRepair} onChange={v => set("componentsUsedForRepair", v)} />
-                <DatePicker label="Repaired Brd Stk Date" required={isRepairStkDateRequired} disabled={isRepairStkDateReadOnly} value={f.repairedBrdStkDate} onChange={v => set("repairedBrdStkDate", v)} minDate={tenYearsAgo} maxDate={today} />
+                <DatePicker modernCaption label="Repaired Brd Stk Date" required={isRepairStkDateRequired} disabled={isRepairStkDateReadOnly} value={f.repairedBrdStkDate} onChange={v => set("repairedBrdStkDate", v)} minDate={tenYearsAgo} maxDate={today} />
                 <Txt label="Repaired Brd Adv No" value={f.repairedBrdAdvNo} onChange={v => set("repairedBrdAdvNo", v)} disabled={isRepairedBrdAdvNoReadOnly} required={isRepairedBrdAdvNoRequired} />
                 <TxtA label="Final Remarks" value={f.finalRemarks} onChange={v => set("finalRemarks", v)} />
                 <Combobox label="Type of Work" required options={toDdOpts(dd5Options)} value={f.typeOfWork} onChange={v => set("typeOfWork", v)} />
-                <DatePicker label="Ship Date from SC" required={isShipDateSCRequired} disabled={isShipDateSCReadOnly} value={f.shipDtFrmSerCntr} onChange={v => set("shipDtFrmSerCntr", v)} minDate={tenYearsAgo} maxDate={today} />
+                <DatePicker modernCaption label="Ship Date from SC" required={isShipDateSCRequired} disabled={isShipDateSCReadOnly} value={f.shipDtFrmSerCntr} onChange={v => set("shipDtFrmSerCntr", v)} minDate={tenYearsAgo} maxDate={today} />
                 <Txt label="Advice No" value={f.dispAdvNo} onChange={v => set("dispAdvNo", v)} disabled={!f.shipDtFrmSerCntr} />
-                <DatePicker label="Ship Date from Commercial" required={isShipDateCommRequired} disabled={isShipDateCommReadOnly} value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} minDate={tenYearsAgo} maxDate={today} />
+                <DatePicker modernCaption label="Ship Date from Commercial" required={isShipDateCommRequired} disabled={isShipDateCommReadOnly} value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} minDate={tenYearsAgo} maxDate={today} />
                 <Txt label="DC No" value={f.dcNo} onChange={v => set("dcNo", v)} required={isDcNoRequired} disabled={isDcNoReadOnly} />
                 <Txt label="Commercial Details / Invoice Remarks" value={f.comrclDtlInvRmrk} onChange={v => set("comrclDtlInvRmrk", v)} />
                 <Combobox label="Report Type" required options={reportTypeOptions.map(r => ({ value: r.id, label: r.value }))} value={f.reportType} onChange={v => set("reportType", v)} />

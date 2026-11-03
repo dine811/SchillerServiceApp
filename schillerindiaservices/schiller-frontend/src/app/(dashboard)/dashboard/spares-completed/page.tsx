@@ -150,6 +150,7 @@ export default function SparesCompletedPage() {
           onChange={setFromDate}
           placeholder="Export from date"
           maxDate={exportFromMax}
+          modernCaption
         />
         <DatePicker
           value={toDate}
@@ -158,6 +159,7 @@ export default function SparesCompletedPage() {
           minDate={exportToMin}
           maxDate={todayStart}
           alignPopover="end"
+          modernCaption
         />
       </div>
 
