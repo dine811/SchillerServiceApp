@@ -268,7 +268,7 @@ export default function CallListAdminPage() {
               />
             </div>
           </div>
-          <DatePicker
+          <DatePicker modernCaption
             label="Export — from (call date)"
             value={exportFrom}
             onChange={setExportFrom}
@@ -276,7 +276,7 @@ export default function CallListAdminPage() {
             minDate={tenYearsAgo}
             maxDate={exportFromMax}
           />
-          <DatePicker
+          <DatePicker modernCaption
             label="Export — to (call date)"
             value={exportTo}
             onChange={setExportTo}

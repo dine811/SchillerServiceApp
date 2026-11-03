@@ -271,7 +271,7 @@ export default function JobSheetPage() {
                   <tr key={suf || "0"} className="border-b border-slate-50">
                     <td className="px-3 py-2 align-top min-w-[168px]">
                       <span className="sr-only">Line {idx + 1}</span>
-                      <DatePicker
+                      <DatePicker modernCaption
                         variant="compact"
                         value={parseRepairDateToIso(String(form[k.repairDate] ?? ""))}
                         onChange={(v) => updateField(k.repairDate, v)}
