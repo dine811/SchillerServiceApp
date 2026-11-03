@@ -9,6 +9,7 @@ import {
   isServiceCoordinator,
   isSparesAllDivisionsRole,
 } from "@/lib/app-role";
+import { DatePicker } from "@/components/ui/date-picker";
 import { ServiceService, type SpareMasterRecord } from "@/services/service-service";
 
 type MeResponse = { role?: string };
@@ -162,8 +163,8 @@ export default function SparesPage() {
         ) : (
           <div className="rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500">Division auto-scoped by login</div>
         )}
-        <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="rounded border border-slate-300 px-3 py-2 text-sm" />
-        <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} className="rounded border border-slate-300 px-3 py-2 text-sm" />
+        <DatePicker value={fromDate} onChange={setFromDate} modernCaption />
+        <DatePicker value={toDate} onChange={setToDate} modernCaption />
       </div>
 
       <div className="flex justify-end">

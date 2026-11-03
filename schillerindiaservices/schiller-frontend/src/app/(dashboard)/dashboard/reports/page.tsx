@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Download, FileText, FileSpreadsheet, BarChart2 } from "lucide-react";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const reports = [
   {
@@ -54,6 +56,9 @@ const recentExports = [
 ];
 
 export default function ReportsPage() {
+  const [reportFrom, setReportFrom] = useState("2026-03-01");
+  const [reportTo, setReportTo] = useState("2026-03-14");
+
   return (
     <div className="space-y-6">
       <div>
@@ -64,11 +69,9 @@ export default function ReportsPage() {
       {/* Date Filter */}
       <div className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex-wrap">
         <p className="text-sm font-medium text-slate-600 mr-2">Date Range:</p>
-        <input type="date" defaultValue="2026-03-01"
-          className="px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 transition" />
+        <DatePicker value={reportFrom} onChange={setReportFrom} modernCaption />
         <span className="text-slate-400 text-sm">to</span>
-        <input type="date" defaultValue="2026-03-14"
-          className="px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 transition" />
+        <DatePicker value={reportTo} onChange={setReportTo} modernCaption />
         <select className="px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-200 transition appearance-none">
           <option>All Regions</option>
           <option>Chennai</option>

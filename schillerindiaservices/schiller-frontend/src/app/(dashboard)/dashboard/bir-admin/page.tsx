@@ -212,11 +212,11 @@ export default function BirAdminPage() {
         <div className="p-4 flex flex-wrap gap-4 items-end">
           <div className="min-w-[140px]">
             <label className="block text-xs font-medium text-slate-600 mb-1">From</label>
-            <DatePicker value={exportFrom} onChange={setExportFrom} placeholder="Start date" maxDate={exportFromMax} />
+            <DatePicker value={exportFrom} onChange={setExportFrom} placeholder="Start date" maxDate={exportFromMax} modernCaption />
           </div>
           <div className="min-w-[140px]">
             <label className="block text-xs font-medium text-slate-600 mb-1">To</label>
-            <DatePicker value={exportTo} onChange={setExportTo} placeholder="End date" minDate={exportToMin} maxDate={todayStart} />
+            <DatePicker value={exportTo} onChange={setExportTo} placeholder="End date" minDate={exportToMin} maxDate={todayStart} modernCaption />
           </div>
           <div className="min-w-[180px]">
             <label className="block text-xs font-medium text-slate-600 mb-1">Division</label>
