@@ -165,7 +165,7 @@ export default function EditClosedCallPage() {
         <div className="border-t border-slate-100 pt-5">
           <h2 className="text-sm font-semibold text-slate-800 mb-3">Editable (legacy ClosedCalls update)</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <DatePicker
+            <DatePicker modernCaption
               label="Call date"
               value={callDate}
               onChange={setCallDate}

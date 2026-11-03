@@ -296,7 +296,7 @@ export default function UpdateServicePage() {
             <TxtA label="Technical Remarks" value={f.technicalRemarks} onChange={v => set("technicalRemarks", v)} />
             <TxtA label="Components Used for Repair" value={f.componentsUsedForRepair} onChange={v => set("componentsUsedForRepair", v)} />
 
-            <DatePicker label={`Repaired Brd Stk Date${!repairDateReadOnly ? " *" : ""}`}
+            <DatePicker modernCaption label={`Repaired Brd Stk Date${!repairDateReadOnly ? " *" : ""}`}
               required={!repairDateReadOnly} disabled={repairDateReadOnly}
               value={f.repairedBrdStkDate} onChange={v => set("repairedBrdStkDate", v)} />
 
@@ -326,16 +326,16 @@ export default function UpdateServicePage() {
               </div>
             )}
 
-            <DatePicker label="Ship Date from Service Centre" value={f.shipDtFrmSerCntr} onChange={v => set("shipDtFrmSerCntr", v)} />
+            <DatePicker modernCaption label="Ship Date from Service Centre" value={f.shipDtFrmSerCntr} onChange={v => set("shipDtFrmSerCntr", v)} />
 
             <Txt label="Dispatch Advice No" value={f.dispAdvNo} onChange={v => set("dispAdvNo", v)}
               disabled={!f.shipDtFrmSerCntr}
               placeholder={f.shipDtFrmSerCntr ? "Enter advice no" : "Unlocks after ship date"} />
 
             {workVariant === "C" ? (
-              <DatePicker label="Ship Date from Commercial *" required value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} />
+              <DatePicker modernCaption label="Ship Date from Commercial *" required value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} />
             ) : (
-              <DatePicker label="Ship Date from Commercial" value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} />
+              <DatePicker modernCaption label="Ship Date from Commercial" value={f.shipDateFromCommercial} onChange={v => set("shipDateFromCommercial", v)} />
             )}
 
             {workVariant === "A" || workVariant === "B" ? (

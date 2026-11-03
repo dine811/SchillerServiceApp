@@ -297,7 +297,7 @@ export default function ClosedCallsPage() {
               />
             </div>
           </div>
-          <DatePicker
+          <DatePicker modernCaption
             label="Call date — from"
             value={exportFrom}
             onChange={setExportFrom}
@@ -305,7 +305,7 @@ export default function ClosedCallsPage() {
             minDate={tenYearsAgo}
             maxDate={exportFromMax}
           />
-          <DatePicker
+          <DatePicker modernCaption
             label="Call date — to"
             value={exportTo}
             onChange={setExportTo}

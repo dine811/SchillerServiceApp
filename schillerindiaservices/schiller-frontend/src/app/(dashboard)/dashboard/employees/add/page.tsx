@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const departments = ["Engineering", "FQC", "Service Coordinator", "Admin", "Repair"];
 const regions = ["Chennai", "Bangalore", "Delhi", "Mumbai", "Kolkata", "Hyderabad", "Pune"];
@@ -10,6 +11,7 @@ const roles = ["Service Engineer", "Senior Engineer", "FQC Engineer", "Team Lead
 
 export default function AddEmployeePage() {
   const [saved, setSaved] = useState(false);
+  const [doj, setDoj] = useState("2026-03-14");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaved(true);
@@ -42,7 +44,7 @@ export default function AddEmployeePage() {
             <F label="Last Name *" name="lastName" placeholder="e.g. Kumar" required />
             <F label="Email *" name="email" type="email" placeholder="ramesh@schiller.com" required />
             <F label="Phone *" name="phone" placeholder="+91 98400 XXXXX" required />
-            <F label="Date of Joining" name="doj" type="date" defaultValue="2026-03-14" />
+            <DatePicker modernCaption label="Date of Joining" value={doj} onChange={setDoj} />
             <F label="Employee ID" name="empId" placeholder="Auto-generated" disabled />
           </div>
         </div>
